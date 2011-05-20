@@ -2,20 +2,6 @@
 Server Side
 ************************
 
-- Create the data model for the cached rest service using Database.com Java SDK for persistence
-	- Policy
-		- Id
-		- Name
-	- License
-		- Id	
-		- Name
-		- URL
-	- LicensePermission
-		- Id	
-		- Policy  (many to 1)
-		- License (many to 1)
-		- Approved (bool)
-
 - Implement the proxy REST service that automatically adds licenses it finds, in a NON-approved state. 
 	- Reads from database.com first. 
 	- If not found, falls back to maven central
