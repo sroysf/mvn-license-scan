@@ -1,18 +1,8 @@
 package com.codechronicle.controller;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.codechronicle.model.MyEntity;
-import com.codechronicle.service.EntityService;
 
 /**
  * Handles requests for the application home page.
@@ -22,7 +12,7 @@ public class EntityController {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityController.class);
 
-	@Inject
+	/*@Inject
 	EntityService entityService;
 	
 	@ModelAttribute("entity")
@@ -42,6 +32,6 @@ public class EntityController {
 	public String update(ModelAndView mv, @ModelAttribute("entity") MyEntity entity) {
 	    	logger.info("updating /myentity");
 		return "redirect:/myentity/"+entityService.save(entity).getId();
-	}
+	}*/
 }
 

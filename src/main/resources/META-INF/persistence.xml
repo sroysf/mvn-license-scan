@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0">
 
+	<!-- Connection information retrieved from environment variable : FORCE_FORCEDATABASE_URL -->
 	<persistence-unit name="forceDatabase">
 		<provider>com.force.sdk.jpa.PersistenceProviderImpl</provider>
 		<!-- In a single module web application, no need to specify classes. Classes 

@@ -69,6 +69,11 @@ public class MVNCentralLicenseResolver implements LicenseResolver {
 		return null;
 	}
 	
+	@Override
+	public String getInformationSourceDescription() {
+		return "Maven central, from project POM file";
+	}
+	
 	protected List<License> extractLicenses(InputStream is) throws Exception {
 		
 		SAXBuilder sb = new SAXBuilder(false);
