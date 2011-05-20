@@ -1,2 +1,42 @@
+************************
+Server Side
+************************
 
-- Add unit tests for MVNCentralLicenseResolver
+- Create the data model for the cached rest service using Database.com Java SDK for persistence
+	- Policy
+		- Id
+		- Name
+	- License
+		- Id	
+		- Name
+		- URL
+	- LicensePermission
+		- Id	
+		- Policy  (many to 1)
+		- License (many to 1)
+		- Approved (bool)
+
+- Implement the proxy REST service that automatically adds licenses it finds, in a NON-approved state. 
+	- Reads from database.com first. 
+	- If not found, falls back to maven central
+	- Post a JSON array of maven coordinates, get back a list of objects with license info and approved/denied
+
+
+- Implement the UI so people can manipulate / add licenses manually for those situations where you can't find them in mvn central
+
+************************
+Client Side
+************************
+
+- Client should (takes policy name as parameter) :
+	- Execute maven dependency:resolve
+	- Take the results, turn it into a proper JSON list, post, and get back a reply
+	- Write out the results as XML
+	- Pass it through some kind of renderer, like XSLT transform, to convert it into a visually useful report
+	
+************************
+Longer term
+************************
+
+- Implement the client functionality as a maven plugin.
+- Use permissions to control who can actually edit the server side policy
