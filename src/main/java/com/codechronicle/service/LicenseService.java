@@ -164,15 +164,16 @@ public class LicenseService {
 				
 				// Save the license, and the new maven coordinate
 				addOrUpdateLicense(license);
-				addOrUpdateMavenCoordinate(mavenCoordinate);
-				
-				return mavenCoordinate;
+				break;
 			}
 		}
 		
 		if (licenses == null) {
-			System.out.println("********* NOT FOUND : " + mavenCoordinate);
+			log.info("Unable to determine license for : " + mavenCoordinate);
+			mavenCoordinate.setLicense(null);
 		}
+
+		addOrUpdateMavenCoordinate(mavenCoordinate);
 		
 		return mavenCoordinate;
 	}
