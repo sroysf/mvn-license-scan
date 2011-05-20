@@ -54,7 +54,6 @@ public class MavenCoordinate {
 		this.version = version;
 	}
 	
-	
 	public String getLicenseInfoSource() {
 		return licenseInfoSource;
 	}
@@ -87,6 +86,10 @@ public class MavenCoordinate {
 
 	@Override
 	public String toString() {
-		return groupId + ":" + artifactId + ":" + version;
+		return getKey();
+	}
+	
+	public String getKey() {
+		return "[" + groupId + ":" + artifactId + ":" + version + "]";
 	}
 }

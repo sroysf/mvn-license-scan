@@ -1,5 +1,7 @@
 package com.codechronicle.model;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 

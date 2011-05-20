@@ -2,6 +2,8 @@
 Server Side
 ************************
 
+- A maven coordinate actually can have a list of licenses associated with it, not just one. 
+
 - Implement the proxy REST service that automatically adds licenses it finds, in a NON-approved state. 
 	- Reads from database.com first. 
 	- If not found, falls back to maven central
@@ -26,3 +28,13 @@ Longer term
 
 - Implement the client functionality as a maven plugin.
 - Use permissions to control who can actually edit the server side policy
+
+
+************************
+Issues
+************************
+
+- Debugging didn't work because of line numbers with data nucleus
+- SLF4J version had to be upgraded to 1.6.0 in order to run with spring in STS. 
+	- Switch to normal Eclipse and try it out. John suggested WTP, running Tomcat inside
+

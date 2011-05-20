@@ -15,4 +15,6 @@ import com.codechronicle.model.MavenCoordinate;
 public interface LicenseResolver {
 	
 	List<License> getLicenses(MavenCoordinate mvnCoordinate); 
+	
+	String getInformationSourceDescription();
 }

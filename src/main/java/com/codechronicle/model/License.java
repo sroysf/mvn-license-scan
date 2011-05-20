@@ -25,8 +25,10 @@ public class License {
 	
 	public License(String name, String url) {
 		super();
-		this.name = name;
-		this.url = url;
+		
+		// For database uniformity.
+		this.name = name.toUpperCase();
+		this.url = url.toUpperCase();
 	}
 	
 	public String getId() {
