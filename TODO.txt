@@ -2,15 +2,17 @@
 Server Side
 ************************
 
+- Add test for situation where HttpConnection fails
+- Add test for situation where results are unparsable (like a bogus version that maven central doesn't know about)
+
 - A maven coordinate actually can have a list of licenses associated with it, not just one. 
 
 - Implement the proxy REST service that automatically adds licenses it finds, in a NON-approved state. 
-	- Reads from database.com first. 
-	- If not found, falls back to maven central
-	- Post a JSON array of maven coordinates, get back a list of objects with license info and approved/denied
+	- Expose the query service via JSON Rest web service
 
 
 - Implement the UI so people can manipulate / add licenses manually for those situations where you can't find them in mvn central
+	 - Can come later, since we already have Salesforce UI!
 
 ************************
 Client Side
