@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
-import com.codechronicle.model.LicenseQueryResponse;
+import com.codechronicle.model.LicenseQueryResponseItem;
 import com.codechronicle.model.MavenCoordinate;
 import com.codechronicle.resolvers.LicenseResolver;
 import com.codechronicle.resolvers.MVNCentralLicenseResolver;
@@ -107,7 +107,17 @@ public class LicenseService {
 		return licensePermissions;
 	}
 	
-	public List<LicenseQueryResponse> getAuthorizationInfo(List<MavenCoordinate> mvnCoords, LicensePolicy policy) {
+	@Transactional
+	public LicensePolicy findPolicy(String name) {
+		List<LicensePolicy> results = em.createQuery("Select p from LicensePolicy p where name = :1",LicensePolicy.class).setParameter(1, name).getResultList();
+		if (results.size() == 0) {
+			return null;
+		} else {
+			return (results.get(0));
+		}
+	}
+	
+	public List<LicenseQueryResponseItem> getAuthorizationInfo(List<MavenCoordinate> mvnCoords, LicensePolicy policy) {
 		
 		// The scale is small enough such that the most efficient thing to do is to just 
 		// load everything into memory and then process them.
@@ -145,23 +155,23 @@ public class LicenseService {
 		
 		// Now lookup the permissions based on the matching license.
 		
-		List<LicenseQueryResponse> queryResponse = new ArrayList<LicenseQueryResponse>();
+		List<LicenseQueryResponseItem> queryResponse = new ArrayList<LicenseQueryResponseItem>();
 		for (MavenCoordinate mc : resolvedCoordList) {
-			LicenseQueryResponse lqr = new LicenseQueryResponse();
+			LicenseQueryResponseItem responseItem = new LicenseQueryResponseItem();
 			
 			License license = mc.getLicense();
-			lqr.setMavenCoordinate(mc);
+			responseItem.setMavenCoordinate(mc);
 			
-			lqr.setApproved(false); // default
+			responseItem.setApproved(false); // default
 			
 			if (license != null) {
 				LicensePermission lp = licensePermissionMap.get(license.getId());
 				if (lp != null) {
-					lqr.setApproved(lp.isApproved());
+					responseItem.setApproved(lp.isApproved());
 				} 
 			}
 			
-			queryResponse.add(lqr);
+			queryResponse.add(responseItem);
 		}
 		
 		return queryResponse;

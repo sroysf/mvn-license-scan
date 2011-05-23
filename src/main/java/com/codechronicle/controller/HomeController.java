@@ -1,5 +1,8 @@
 package com.codechronicle.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -12,7 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.codechronicle.model.License;
+import com.codechronicle.model.LicensePolicy;
+import com.codechronicle.model.LicenseQueryResponse;
+import com.codechronicle.model.LicenseQueryResponseItem;
+import com.codechronicle.model.MavenCoordinate;
 import com.codechronicle.service.EntityService;
+import com.codechronicle.service.LicenseService;
 
 /**
  * Handles requests for the application home page.
@@ -23,7 +31,7 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 	@Inject
-	EntityService entityService;
+	LicenseService licenseService;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -34,10 +42,30 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/{policy}/{mvncoord}")
-	public @ResponseBody License getBook (@PathVariable(value="policy") String policy, @PathVariable(value="mvncoord") String mvncoord, Model model) {
-		License l = new License(policy, mvncoord);
-		return l;
+	@RequestMapping(method=RequestMethod.GET, value="/{policy}/{mvncoords}")
+	public @ResponseBody LicenseQueryResponse getLicenseAuthorizations (@PathVariable(value="policy") String policy, 
+			@PathVariable(value="mvncoords") String mvncoords, Model model) {
+		
+		LicensePolicy lp = licenseService.findPolicy(policy);
+		LicenseQueryResponse lqr = new LicenseQueryResponse();
+		if (lp == null) {
+			lqr.setMessage("License policy " + "[" + policy + "] not found.");
+		} else {
+			
+			List<MavenCoordinate> searchCoords = new ArrayList<MavenCoordinate>();
+			String[] splitCoords = mvncoords.split(",");
+			for (String sp : splitCoords) {
+				String[] varsplit = sp.split(":");
+				MavenCoordinate mc = new MavenCoordinate(varsplit[0], varsplit[1], varsplit[2]);
+				searchCoords.add(mc);
+			}
+			
+			List<LicenseQueryResponseItem> responseItems = licenseService.getAuthorizationInfo(searchCoords, lp);
+			lqr.setResponseItems(responseItems);
+			lqr.setMessage("OK");
+		}
+		
+		return lqr;
 	}
 
 }

@@ -1,25 +1,23 @@
 package com.codechronicle.model;
 
+import java.util.List;
+
 public class LicenseQueryResponse {
+	private String message;
+	private List<LicenseQueryResponseItem> responseItems;
 	
-	private MavenCoordinate mavenCoordinate;
-	private boolean approved;
-	
-	public MavenCoordinate getMavenCoordinate() {
-		return mavenCoordinate;
+	public String getMessage() {
+		return message;
 	}
-	public void setMavenCoordinate(MavenCoordinate mavenCoordinate) {
-		this.mavenCoordinate = mavenCoordinate;
+	public void setMessage(String message) {
+		this.message = message;
 	}
-	public boolean isApproved() {
-		return approved;
+	public List<LicenseQueryResponseItem> getResponseItems() {
+		return responseItems;
 	}
-	public void setApproved(boolean approved) {
-		this.approved = approved;
+	public void setResponseItems(List<LicenseQueryResponseItem> responseItems) {
+		this.responseItems = responseItems;
 	}
 	
-	@Override
-	public String toString() {
-		return mavenCoordinate + " (" + mavenCoordinate.getLicense() + ", " + mavenCoordinate.getLicenseInfoSource() + ") : " + approved;
-	}
+	
 }

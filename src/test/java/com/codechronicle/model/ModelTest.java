@@ -72,7 +72,7 @@ public class ModelTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void queryTest() {
 		List<LicensePolicy> policies = em.createQuery("select l from LicensePolicy l where name = 'SFDCOpenSource'", LicensePolicy.class).getResultList();
 		Assert.assertEquals(1, policies.size());
@@ -92,9 +92,21 @@ public class ModelTest {
 		searchCoords.add(beanshell);
 		searchCoords.add(hibernateParent);
 		
-		List<LicenseQueryResponse> response = licenseService.getAuthorizationInfo(searchCoords, policy);
-		for (LicenseQueryResponse licenseQueryResponse : response) {
+		List<LicenseQueryResponseItem> response = licenseService.getAuthorizationInfo(searchCoords, policy);
+		for (LicenseQueryResponseItem licenseQueryResponse : response) {
 			System.out.println("****** " + licenseQueryResponse);
+		}
+	}
+	
+	@Test
+	public void splitTest() {
+		String mvncoords = "httpunit:httpunit:1.7,org.apache.httpcomponents:httpclient:4.1.1";
+		
+		String[] splitCoords = mvncoords.split(",");
+		for (String sp : splitCoords) {
+			String[] varsplit = sp.split(":");
+			MavenCoordinate mc = new MavenCoordinate(varsplit[0], varsplit[1], varsplit[2]);
+			System.out.println(mc);
 		}
 	}
 }
