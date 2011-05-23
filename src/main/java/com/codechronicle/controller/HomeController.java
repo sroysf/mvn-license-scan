@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.codechronicle.model.License;
+import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
 import com.codechronicle.model.LicenseQueryResponse;
 import com.codechronicle.model.LicenseQueryResponseItem;
@@ -28,23 +32,60 @@ import com.codechronicle.service.LicenseService;
 @Controller
 public class HomeController {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	@Inject
 	LicenseService licenseService;
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String home() {
-	    	logger.info("requesting home");
-		return "home";
+	@RequestMapping(method=RequestMethod.GET, value="/createPerm")
+	public ModelAndView createLicensePermission(ModelAndView mv, HttpServletRequest request) {
+		mv.setViewName("createLicensePerm");
+		return mv;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/{policy}/{mvncoords}")
-	public @ResponseBody LicenseQueryResponse getLicenseAuthorizations (@PathVariable(value="policy") String policy, 
-			@PathVariable(value="mvncoords") String mvncoords, Model model) {
+	@RequestMapping(method=RequestMethod.GET, value="/licenseQuery")
+	public ModelAndView queryLicensePermissions(ModelAndView mv, HttpServletRequest request) {
+		mv.setViewName("queryLicensePerms");
+		return mv;
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/licensePermission")
+	public @ResponseBody LicensePermission createLicensePermission(@RequestParam(value="policy") String policy,
+			@RequestParam(value="licenseId") String licenseId,
+			@RequestParam(value="approved") String approved) {
+		System.out.println("Checking post of coordinates for license policy : " + policy);
+		System.out.println(licenseId);
+		
+		LicensePolicy licensePolicy = licenseService.findPolicy(policy);
+		if (licensePolicy == null) {
+			log.warn("Unable to find license policy : " + policy);
+			return null;
+		}
+		
+		License license = licenseService.findLicenseById(licenseId);
+		if (license == null) {
+			log.warn("Unable to find license with id : " + licenseId);
+			return null;
+		}
+		
+		LicensePermission lp = new LicensePermission(licensePolicy, license, Boolean.valueOf(approved));
+		licenseService.addOrUpdateLicensePermission(lp);
+		return lp;
+	} 
+	
+	/**
+	 * 
+	 * 
+	 * @param policy
+	 * @param mvncoords
+	 * @param model
+	 * @return
+	 * 
+	 * Sample URI : /auths/SFDCOpenSource/org.beanshell:beanshell:2.0b4,org.hibernate:hibernate-parent:3.5.6-Final,org.apache.commons:commons-io:1.3.2
+	 */
+	@RequestMapping(method=RequestMethod.POST, value="/licenseQuery")
+	public @ResponseBody LicenseQueryResponse getLicenseAuthorizations (@RequestParam(value="policy") String policy, 
+			@RequestParam(value="mvncoords") String mvncoords, Model model) {
 		
 		LicensePolicy lp = licenseService.findPolicy(policy);
 		LicenseQueryResponse lqr = new LicenseQueryResponse();
@@ -60,7 +101,10 @@ public class HomeController {
 				searchCoords.add(mc);
 			}
 			
+			System.out.println(searchCoords);
+			
 			List<LicenseQueryResponseItem> responseItems = licenseService.getAuthorizationInfo(searchCoords, lp);
+			//List<LicenseQueryResponseItem> responseItems = new ArrayList<LicenseQueryResponseItem>();
 			lqr.setResponseItems(responseItems);
 			lqr.setMessage("OK");
 		}

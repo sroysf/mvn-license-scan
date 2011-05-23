@@ -109,7 +109,7 @@ public class LicenseService {
 	
 	@Transactional
 	public LicensePolicy findPolicy(String name) {
-		List<LicensePolicy> results = em.createQuery("Select p from LicensePolicy p where name = :1",LicensePolicy.class).setParameter(1, name).getResultList();
+		List<LicensePolicy> results = em.createQuery("Select p from LicensePolicy p where name = :name",LicensePolicy.class).setParameter("name", name).getResultList();
 		if (results.size() == 0) {
 			return null;
 		} else {
@@ -145,8 +145,8 @@ public class LicenseService {
 		}
 		
 		// Get all the license perms for the given policy and put them in a map.
-		TypedQuery<LicensePermission> lpQuery = em.createQuery("Select l from LicensePermission l where policy = :1", LicensePermission.class);
-		lpQuery.setParameter(1, policy);
+		TypedQuery<LicensePermission> lpQuery = em.createQuery("Select l from LicensePermission l where policy = :policy", LicensePermission.class);
+		lpQuery.setParameter("policy", policy);
 		List<LicensePermission> licensePermissions = lpQuery.getResultList();
 		Map<String, LicensePermission> licensePermissionMap = new HashMap<String, LicensePermission>();
 		for (LicensePermission licensePermission : licensePermissions) {
@@ -190,7 +190,7 @@ public class LicenseService {
 				License license = licenses.get(0);
 				
 				// If we already have this license, use that.
-				License existingLicense = findExistingLicense(license);
+				License existingLicense = findLicenseByNameAndURL(license.getName(), license.getUrl());
 				if (existingLicense != null) {
 					log.info("License was found in database, updating maven coordinate reference : " + existingLicense);
 					license = existingLicense;
@@ -218,16 +218,34 @@ public class LicenseService {
 		
 		return mavenCoordinate;
 	}
+	
+	public License findLicenseById(String licenseId) {
+		TypedQuery<License> query = em.createQuery("Select l from License l where id = :id", License.class);
+		query.setParameter("id", licenseId);
+		List<License> licenses = query.getResultList();
+		if (licenses.size() > 0) {
+			log.info("Found 1, licenses result set size is : " + licenses.size());
+			return licenses.get(0);
+		} else {
+			log.info("Unable to find matching license");
+			return null;
+		}
+	}
 
-	private License findExistingLicense(License license) {
-		TypedQuery<License> query = em.createQuery("Select l from License l where name = :1 AND url = :2", License.class);
-		query.setParameter(1, license.getName().toUpperCase());
-		query.setParameter(2, license.getUrl().toUpperCase());
+	public License findLicenseByNameAndURL(String licenseName, String licenseURL) {
+		
+		log.info("Searching for existing license by name and URL : " + licenseName + " url = " + licenseURL);
+		
+		TypedQuery<License> query = em.createQuery("Select l from License l where name = :name AND url = :url", License.class);
+		query.setParameter("name", licenseName.toUpperCase());
+		query.setParameter("url", licenseURL.toUpperCase());
 		
 		List<License> licenses = query.getResultList();
 		if (licenses.size() > 0) {
+			log.info("Found 1, licenses result set size is : " + licenses.size());
 			return licenses.get(0);
 		} else {
+			log.info("Unable to find matching license");
 			return null;
 		}
 	}

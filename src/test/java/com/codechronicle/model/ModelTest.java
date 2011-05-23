@@ -97,16 +97,4 @@ public class ModelTest {
 			System.out.println("****** " + licenseQueryResponse);
 		}
 	}
-	
-	@Test
-	public void splitTest() {
-		String mvncoords = "httpunit:httpunit:1.7,org.apache.httpcomponents:httpclient:4.1.1";
-		
-		String[] splitCoords = mvncoords.split(",");
-		for (String sp : splitCoords) {
-			String[] varsplit = sp.split(":");
-			MavenCoordinate mc = new MavenCoordinate(varsplit[0], varsplit[1], varsplit[2]);
-			System.out.println(mc);
-		}
-	}
 }
