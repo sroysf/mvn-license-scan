@@ -1,18 +1,21 @@
 ************************
 Server Side
 ************************
-
+- Test
+- Need a lot more test cases for different license scenarios
 - Add test for situation where HttpConnection fails
 - Add test for situation where results are unparsable (like a bogus version that maven central doesn't know about)
 
 - A maven coordinate actually can have a list of licenses associated with it, not just one. 
 
-- Implement the proxy REST service that automatically adds licenses it finds, in a NON-approved state. 
+- Implement the proxy REST service 
 	- Expose the query service via JSON Rest web service
 
 
 - Implement the UI so people can manipulate / add licenses manually for those situations where you can't find them in mvn central
 	 - Can come later, since we already have Salesforce UI!
+	 
+- *** Remove VMForce references from archetype, pom file
 
 ************************
 Client Side
@@ -39,4 +42,15 @@ Issues
 - Debugging didn't work because of line numbers with data nucleus
 - SLF4J version had to be upgraded to 1.6.0 in order to run with spring in STS. 
 	- Switch to normal Eclipse and try it out. John suggested WTP, running Tomcat inside
-
+- Why does it look at cliforce?
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+- Why does it seem to create so many connections?
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
+	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls

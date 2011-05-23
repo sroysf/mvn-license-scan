@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
+import com.codechronicle.model.LicenseQueryResponse;
 import com.codechronicle.model.MavenCoordinate;
 import com.codechronicle.resolvers.LicenseResolver;
 import com.codechronicle.resolvers.MVNCentralLicenseResolver;
@@ -106,7 +107,7 @@ public class LicenseService {
 		return licensePermissions;
 	}
 	
-	public void getAuthorizationInfo(List<MavenCoordinate> mvnCoords, LicensePolicy policy) {
+	public List<LicenseQueryResponse> getAuthorizationInfo(List<MavenCoordinate> mvnCoords, LicensePolicy policy) {
 		
 		// The scale is small enough such that the most efficient thing to do is to just 
 		// load everything into memory and then process them.
@@ -119,23 +120,52 @@ public class LicenseService {
 			knownCoordMap.put(knownMavenCoordinate.getKey(), knownMavenCoordinate);
 		}
 		
-		// For each of the given maven coordinates, try to find it in the known list
-		Map<String,MavenCoordinate> foundCoordMap = new HashMap<String, MavenCoordinate>();
+		// For each of the given maven coordinates, try to find it in the known list, or resolve it
+		List<MavenCoordinate> resolvedCoordList = new ArrayList<MavenCoordinate>();
 		for (MavenCoordinate mavenCoordinate : mvnCoords) {
-			MavenCoordinate foundCoord = knownCoordMap.get(mavenCoordinate.getKey());
-			if (foundCoord != null) {
-				foundCoordMap.put(foundCoord.getKey(), foundCoord);
-			} else {
+			MavenCoordinate resolvedCoord = knownCoordMap.get(mavenCoordinate.getKey());
+			
+			if (resolvedCoord == null) {
 				// Try to resolve the unknown one using our list of resolvers
 				log.info(mavenCoordinate + " not found in license cache. Using registered resolvers to search for license.");
-				foundCoord = resolveLicense(mavenCoordinate);
+				resolvedCoord = resolveLicense(mavenCoordinate);
 			}
+			
+			resolvedCoordList.add(resolvedCoord);
 		}
 		
-		// Get all the license perms for the given policy
+		// Get all the license perms for the given policy and put them in a map.
 		TypedQuery<LicensePermission> lpQuery = em.createQuery("Select l from LicensePermission l where policy = :1", LicensePermission.class);
 		lpQuery.setParameter(1, policy);
 		List<LicensePermission> licensePermissions = lpQuery.getResultList();
+		Map<String, LicensePermission> licensePermissionMap = new HashMap<String, LicensePermission>();
+		for (LicensePermission licensePermission : licensePermissions) {
+			licensePermissionMap.put(licensePermission.getLicense().getId(), licensePermission);
+		}
+		
+		// Now lookup the permissions based on the matching license.
+		
+		List<LicenseQueryResponse> queryResponse = new ArrayList<LicenseQueryResponse>();
+		for (MavenCoordinate mc : resolvedCoordList) {
+			LicenseQueryResponse lqr = new LicenseQueryResponse();
+			
+			License license = mc.getLicense();
+			lqr.setMavenCoordinate(mc);
+			
+			lqr.setApproved(false); // default
+			
+			if (license != null) {
+				LicensePermission lp = licensePermissionMap.get(license.getId());
+				if (lp != null) {
+					lqr.setApproved(lp.isApproved());
+				} 
+			}
+			
+			queryResponse.add(lqr);
+		}
+		
+		return queryResponse;
+		
 	}
 
 	private MavenCoordinate resolveLicense(MavenCoordinate mavenCoordinate) {
@@ -156,6 +186,7 @@ public class LicenseService {
 					license = existingLicense;
 				} else {
 					log.info("Updating database with new license : " + license);
+					addOrUpdateLicense(license);
 				}
 				
 				// Map them into the maven coordinate
@@ -179,7 +210,7 @@ public class LicenseService {
 	}
 
 	private License findExistingLicense(License license) {
-		TypedQuery<License> query = em.createQuery("Select l from License l where name = :1 OR url = :2", License.class);
+		TypedQuery<License> query = em.createQuery("Select l from License l where name = :1 AND url = :2", License.class);
 		query.setParameter(1, license.getName().toUpperCase());
 		query.setParameter(2, license.getUrl().toUpperCase());
 		

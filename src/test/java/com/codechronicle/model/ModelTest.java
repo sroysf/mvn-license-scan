@@ -83,14 +83,18 @@ public class ModelTest {
 		MavenCoordinate spring = new MavenCoordinate("org.springframework", "spring-webmvc", "3.0.5.RELEASE");
 		MavenCoordinate cio = new MavenCoordinate("org.apache.commons", "commons-io", "1.3.2");
 		MavenCoordinate beanshell = new MavenCoordinate("org.beanshell", "beanshell", "2.0b4");
+		MavenCoordinate hibernateParent = new MavenCoordinate("org.hibernate", "hibernate-parent", "3.5.6-Final");
 		
 		List<MavenCoordinate> searchCoords = new ArrayList<MavenCoordinate>();
 		searchCoords.add(httpClient);
 		searchCoords.add(spring);
 		searchCoords.add(cio);
 		searchCoords.add(beanshell);
+		searchCoords.add(hibernateParent);
 		
-		licenseService.getAuthorizationInfo(searchCoords, policy);
-		
+		List<LicenseQueryResponse> response = licenseService.getAuthorizationInfo(searchCoords, policy);
+		for (LicenseQueryResponse licenseQueryResponse : response) {
+			System.out.println("****** " + licenseQueryResponse);
+		}
 	}
 }

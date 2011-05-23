@@ -25,6 +25,21 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
+	<!-- Enable rendering of JSON back to client -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="text/xml" />
+				<entry key="htm" value="text/html" />
+			</map>
+		</property>
+		<property name="favorParameter" value="true" />
+		<property name="favorPathExtension" value="false" />
+		<property name="ignoreAcceptHeader" value="true" />
+		<property name="defaultContentType" value="application/json" />
+	</bean>
 	
 	<context:component-scan base-package="com.codechronicle" />
 	

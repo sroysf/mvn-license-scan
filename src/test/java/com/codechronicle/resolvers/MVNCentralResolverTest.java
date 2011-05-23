@@ -25,8 +25,8 @@ public class MVNCentralResolverTest {
 		Assert.assertEquals(1, licenses.size());
 		
 		License license = licenses.get(0);
-		Assert.assertEquals("Common Public License Version 1.0", license.getName());
-		Assert.assertEquals("http://www.opensource.org/licenses/cpl1.0.txt", license.getUrl());
+		Assert.assertTrue("Common Public License Version 1.0".equalsIgnoreCase(license.getName()));
+		Assert.assertTrue("http://www.opensource.org/licenses/cpl1.0.txt".equalsIgnoreCase(license.getUrl()));
 	}
 	
 	@Test
@@ -39,12 +39,12 @@ public class MVNCentralResolverTest {
 		Assert.assertEquals(2, licenses.size());
 		
 		License l1 = licenses.get(0);
-		Assert.assertEquals("Common Public License Version 1.0", l1.getName());
-		Assert.assertEquals("http://www.opensource.org/licenses/cpl1.0.txt", l1.getUrl());
+		Assert.assertTrue("Common Public License Version 1.0".equalsIgnoreCase(l1.getName()));
+		Assert.assertTrue("http://www.opensource.org/licenses/cpl1.0.txt".equalsIgnoreCase(l1.getUrl()));
 		
 		License l2 = licenses.get(1);
-		Assert.assertEquals("GNU LESSER GENERAL PUBLIC LICENSE", l2.getName());
-		Assert.assertEquals("http://www.gnu.org/licenses/lgpl.txt", l2.getUrl());
+		Assert.assertTrue("GNU LESSER GENERAL PUBLIC LICENSE".equalsIgnoreCase(l2.getName()));
+		Assert.assertTrue("http://www.gnu.org/licenses/lgpl.txt".equalsIgnoreCase(l2.getUrl()));
 	}
 	
 	@Test

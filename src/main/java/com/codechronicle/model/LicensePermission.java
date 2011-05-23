@@ -20,6 +20,13 @@ public class LicensePermission {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
 
+	@ManyToOne
+	private LicensePolicy policy;
+	
+	@ManyToOne
+	private License license;
+	
+	private boolean approved = false;
 	
 	public LicensePermission() {
 	}
@@ -44,16 +51,32 @@ public class LicensePermission {
 		return id;
 	}
 
-	@ManyToOne
-	private LicensePolicy policy;
-	
-	@ManyToOne
-	private License license;
-	
-	private boolean approved = false;
-	
 	@Override
 	public String toString() {
 		return policy + " -> " + license + " -> | Approved = " + approved;
+	}
+
+	public LicensePolicy getPolicy() {
+		return policy;
+	}
+
+	public void setPolicy(LicensePolicy policy) {
+		this.policy = policy;
+	}
+
+	public License getLicense() {
+		return license;
+	}
+
+	public void setLicense(License license) {
+		this.license = license;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 }
