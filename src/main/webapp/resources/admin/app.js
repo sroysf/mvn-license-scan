@@ -1,11 +1,16 @@
+
 Ext.Loader.setConfig({enabled:true});
+
+var SERVER_ROOT = '/mvn-license-scan/';
+
 Ext.application({
     name: 'AM',
 
     appFolder: 'app',
 
     controllers: [
-        'Users'
+        'Users',
+        'LicensePolicies'
     ],
 
     launch: function() {
@@ -13,7 +18,7 @@ Ext.application({
             layout: 'fit',
             items: [
                 {
-                    xtype: 'userlist',
+                    xtype: 'licensePolicyList',
                 }
             ]
         });

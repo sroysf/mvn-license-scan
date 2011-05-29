@@ -231,6 +231,12 @@ public class LicenseService {
 			return null;
 		}
 	}
+	
+	public List<LicensePolicy> findLicensePolicies() {
+		TypedQuery<LicensePolicy> query = em.createQuery("Select l from LicensePolicy l", LicensePolicy.class);
+		List<LicensePolicy> policies = query.getResultList();
+		return policies;
+	}
 
 	public License findLicenseByNameAndURL(String licenseName, String licenseURL) {
 		

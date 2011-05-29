@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.codechronicle.dto.LicensePolicyResponse;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -36,6 +37,15 @@ public class HomeController {
 
 	@Inject
 	LicenseService licenseService;
+	
+	@RequestMapping(method=RequestMethod.GET, value="/license_policy")
+	public @ResponseBody LicensePolicyResponse getAllLicensePolicies() {
+		LicensePolicyResponse response = new LicensePolicyResponse();
+		response.setSuccess(true);
+		response.setPolicies(licenseService.findLicensePolicies());
+		
+		return response;
+	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/createPerm")
 	public ModelAndView createLicensePermission(ModelAndView mv, HttpServletRequest request) {
