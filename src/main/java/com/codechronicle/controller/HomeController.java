@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.codechronicle.dto.LicensePolicyResponse;
+import com.codechronicle.dto.MavenCoordinateResponse;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -38,7 +39,18 @@ public class HomeController {
 
 	@Inject
 	LicenseService licenseService;
+
 	
+	//----------- Begin Used by UI -------------
+
+	// LicensePolicy : create
+	@RequestMapping(method=RequestMethod.POST, value="/license_policy")
+	public @ResponseBody LicensePolicyResponse createLicensePolicy(@RequestBody LicensePolicy lp) {
+		
+		return new LicensePolicyResponse();
+	}
+	
+	// LicensePolicy : find - all
 	@RequestMapping(method=RequestMethod.GET, value="/license_policy")
 	public @ResponseBody LicensePolicyResponse getAllLicensePolicies() {
 		LicensePolicyResponse response = new LicensePolicyResponse();
@@ -48,13 +60,17 @@ public class HomeController {
 		return response;
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/license_policy")
-	public @ResponseBody LicensePolicyResponse saveLicensePolicy(@RequestBody LicensePolicy lp) {
+	// MavenCoordinates : find - all
+	@RequestMapping(method=RequestMethod.GET, value="/artifact")
+	public @ResponseBody MavenCoordinateResponse getAllMavenCoordinates() {
 		
-		log.info("Received post of license policy : " + lp);
-		
-		return new LicensePolicyResponse();
+		MavenCoordinateResponse response= new MavenCoordinateResponse();
+		response.setSuccess(true);
+		response.setArtifacts(licenseService.findMavenCoordinates());
+		return response;
 	}
+	
+	//----------- End Used by UI -------------	
 	
 	@RequestMapping(method=RequestMethod.GET, value="/createPerm")
 	public ModelAndView createLicensePermission(ModelAndView mv, HttpServletRequest request) {

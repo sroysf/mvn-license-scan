@@ -1,8 +1,7 @@
 Ext.define('AM.controller.MainController', {
     extend: 'Ext.app.Controller',
 
-    views: ['AppMain',
-            'licensePolicy.List'],
+    views: ['AppMain'],
          
     init: function() {
     }

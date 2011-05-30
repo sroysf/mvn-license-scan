@@ -1,6 +1,24 @@
-Ext.define('AM.controller.LicensePolicies', {
+Ext.define('AM.controller.LicensesController', {
     extend: 'Ext.app.Controller',
 
+    stores: [],
+    
+    models: ['License'],
+    
+    views: [],
+         
+    init: function() {
+    	/*this.control({
+            'licensePolicyList': {
+                select: this.addLicense
+            }
+        });*/
+    }
+    
+    /*
+     *  This is the previous working code
+     * 
+     * 
     stores: ['LicensePolicies'],
     
     models: ['LicensePolicy'],
@@ -26,5 +44,6 @@ Ext.define('AM.controller.LicensePolicies', {
     	licensePoliciesStore.add(l);
     	licensePoliciesStore.sync();
     }
+     */
     
 });

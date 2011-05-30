@@ -237,6 +237,12 @@ public class LicenseService {
 		List<LicensePolicy> policies = query.getResultList();
 		return policies;
 	}
+	
+	public List<MavenCoordinate> findMavenCoordinates() {
+		TypedQuery<MavenCoordinate> query = em.createQuery("Select l from MavenCoordinate l", MavenCoordinate.class);
+		List<MavenCoordinate> artifacts = query.getResultList();
+		return artifacts;
+	}
 
 	public License findLicenseByNameAndURL(String licenseName, String licenseURL) {
 		

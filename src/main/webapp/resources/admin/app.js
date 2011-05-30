@@ -10,7 +10,9 @@ Ext.application({
 
     controllers: [
         'MainController',
-        'LicensePolicies'
+        'ArtifactsController',
+        'PermissionsController',
+        'LicensesController'
     ],
     
     launch: function() {

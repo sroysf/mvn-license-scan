@@ -15,10 +15,9 @@ Ext.define('AM.view.AppMain' ,{
         xtype: 'panel',
         title: 'Licenses',
     },{
-        xtype: 'panel',
-        title: 'Artifacts',
+        xtype: 'artifactsManager',
     },{
-        xtype: 'licensePolicyList',
+        xtype: 'panel',
         title: 'Permissions',
     }],
 
