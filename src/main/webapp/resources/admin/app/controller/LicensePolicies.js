@@ -5,7 +5,7 @@ Ext.define('AM.controller.LicensePolicies', {
     
     models: ['LicensePolicy'],
     
-    views: ['licensePolicy.List'],
+    views: ['AppMain'],
          
     init: function() {
     	this.control({

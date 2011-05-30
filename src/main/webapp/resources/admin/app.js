@@ -9,16 +9,16 @@ Ext.application({
     appFolder: 'app',
 
     controllers: [
-        'Users',
+        'MainController',
         'LicensePolicies'
     ],
-
+    
     launch: function() {
         Ext.create('Ext.panel.Panel', {
             layout: 'fit',
             items: [
                 {
-                    xtype: 'licensePolicyList',
+                    xtype: 'appMain'
                 }
             ],
             renderTo: adminAppBody
