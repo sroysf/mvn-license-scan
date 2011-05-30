@@ -9,6 +9,19 @@ Ext.define('AM.store.LicensePolicies', {
    		reader: {
             type: 'json',
             root: 'policies'
+        },
+        
+        listeners: {
+        	exception: {
+        		fn : function (proxy, response, operation) {
+        			if (response.status != 200) {
+	        			console.log("Caught an exception from server ");
+	        			for (x in response) {
+	        				console.log(x + ' -> ' + response[x]);
+	        			}
+        			}
+        		}
+        	}
         }
    	}
 });

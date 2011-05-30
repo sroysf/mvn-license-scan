@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +46,14 @@ public class HomeController {
 		response.setPolicies(licenseService.findLicensePolicies());
 		
 		return response;
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/license_policy")
+	public @ResponseBody LicensePolicyResponse saveLicensePolicy(@RequestBody LicensePolicy lp) {
+		
+		log.info("Received post of license policy : " + lp);
+		
+		return new LicensePolicyResponse();
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/createPerm")

@@ -14,13 +14,14 @@ Ext.application({
     ],
 
     launch: function() {
-        Ext.create('Ext.container.Viewport', {
+        Ext.create('Ext.panel.Panel', {
             layout: 'fit',
             items: [
                 {
                     xtype: 'licensePolicyList',
                 }
-            ]
+            ],
+            renderTo: adminAppBody
         });
     }
 });
