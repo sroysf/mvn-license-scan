@@ -39,23 +39,4 @@ Longer term
 Issues
 ************************
 
-- Debugging didn't work because of line numbers with data nucleus
-- SLF4J version had to be upgraded to 1.6.0 in order to run with spring in STS. 
-	- Switch to normal Eclipse and try it out. John suggested WTP, running Tomcat inside
-- Why does it look at cliforce?
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-- User's password is echoed to the console
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from environment variable: force://vmf01.t.salesforce.com;user=saptarshi.roy@salesforce.com;password=testing123R10dOD0WoZd9WCbN5SLZjG4EM
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from environment variable: force://vmf01.t.salesforce.com;user=saptarshi.roy@salesforce.com;password=testing123R10dOD0WoZd9WCbN5SLZjG4EM
-- Why does it seem to create so many connections?
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-	INFO : com.force.sdk.connector - Connection : Creating forceDatabase from cliforce connections file: /home/javacloud/.force/cliforce_urls
-- The long startup time for persistence : can you disable it temporarily
-- More than one positional parameter always ends up using the first one
+
