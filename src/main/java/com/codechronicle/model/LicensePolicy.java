@@ -54,4 +54,7 @@ public class LicensePolicy {
 		return name;
 	}
 	
+	public List<LicensePermission> getLicensePermissions() {
+		return licensePermissions;
+	}
 }

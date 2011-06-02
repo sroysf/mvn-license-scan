@@ -238,10 +238,16 @@ public class LicenseService {
 		return policies;
 	}
 	
-	public List<MavenCoordinate> findMavenCoordinates() {
+	public List<MavenCoordinate> findAllMavenCoordinates() {
 		TypedQuery<MavenCoordinate> query = em.createQuery("Select l from MavenCoordinate l", MavenCoordinate.class);
 		List<MavenCoordinate> artifacts = query.getResultList();
 		return artifacts;
+	}
+	
+	public List<License> findAllLicenses() {
+		TypedQuery<License> query = em.createQuery("Select l from License l", License.class);
+		List<License> licenses = query.getResultList();
+		return licenses;
 	}
 
 	public License findLicenseByNameAndURL(String licenseName, String licenseURL) {

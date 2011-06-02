@@ -66,7 +66,7 @@ public class HomeController {
 		
 		MavenCoordinateResponse response= new MavenCoordinateResponse();
 		response.setSuccess(true);
-		response.setArtifacts(licenseService.findMavenCoordinates());
+		response.setArtifacts(licenseService.findAllMavenCoordinates());
 		return response;
 	}
 	
