@@ -12,8 +12,9 @@ Ext.define('AM.view.AppMain' ,{
     renderTo: document.body,
     
     items: [{                        
-        xtype: 'panel',
-        title: 'Licenses',
+        //xtype: 'panel',
+        //title: 'Licenses',
+    	xtype: 'licensesManager'
     },{
         xtype: 'artifactsManager',
     },{
