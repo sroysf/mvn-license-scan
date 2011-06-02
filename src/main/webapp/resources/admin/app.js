@@ -1,7 +1,7 @@
 
 Ext.Loader.setConfig({enabled:true});
 
-var SERVER_ROOT = '/mvn-license-scan/';
+var SERVER_ROOT = '/mvn-license-scan/rest/';
 
 Ext.application({
     name: 'AM',

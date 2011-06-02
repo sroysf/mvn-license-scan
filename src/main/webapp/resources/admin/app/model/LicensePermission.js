@@ -3,12 +3,7 @@ Ext.define('AM.model.LicensePermission', {
     
     fields: [{name: 'id', type: 'string'},
              {name: 'approved', type: 'boolean', defaultValue:false},
-             {name: 'licensePolicy_id', type: 'string'},
-             {name: 'license_id', type: 'string'}
-    ],
-
-	associations: [
-	    {type : 'belongsTo', model: 'LicensePolicy'},
-	    {type : 'belongsTo', model: 'License'}
-	]
+             {name: 'policyId', type: 'string'},
+             {name: 'licenseId', type: 'string'}
+    ]
 });

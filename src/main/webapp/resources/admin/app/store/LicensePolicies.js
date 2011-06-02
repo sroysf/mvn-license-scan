@@ -5,7 +5,7 @@ Ext.define('AM.store.LicensePolicies', {
     
 	proxy: {
    		type : 'rest',
-   		url  : SERVER_ROOT + 'license_policy',
+   		url  : SERVER_ROOT + 'policy',
    		reader: {
             type: 'json',
             root: 'policies'

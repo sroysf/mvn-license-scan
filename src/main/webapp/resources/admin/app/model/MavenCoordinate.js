@@ -6,9 +6,7 @@ Ext.define('AM.model.MavenCoordinate', {
              {name : 'artifactId', type: 'string'},
              {name : 'version', type: 'string'},
              {name : 'licenseInfoSource', type: 'string'},
-             {name : 'licenseId', type: 'string', mapping:'license.id'},
-             {name : 'licenseName', type:'string', mapping:'license.name'},
-             {name : 'licenseUrl', type:'string', mapping:'license.url'}
+             {name : 'licenseId', type: 'string'}
     ]
 
 	// http://stackoverflow.com/questions/1810311/ext-js-columnmodel-binding-to-a-complex-json-object

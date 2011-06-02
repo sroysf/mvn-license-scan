@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,8 @@ import com.codechronicle.service.LicenseService;
 @RequestMapping(value="/rest")
 public class RestController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(EntityController.class);
+	
 	@Inject
 	LicenseService licenseService;
 
@@ -42,6 +46,9 @@ public class RestController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/artifact")
 	public @ResponseBody Collection<MavenCoordinateDTO> getAllArtifacts() {
+		
+		logger.info("/rest/artifact");
+		
 		List<MavenCoordinate> coords = licenseService.findAllMavenCoordinates();
 		
 		Collection<MavenCoordinateDTO> artifactList = new ArrayList<MavenCoordinateDTO>();
@@ -59,6 +66,9 @@ public class RestController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/license")
 	public @ResponseBody Collection<License> getAllLicenses() {
+		
+		logger.info("/rest/license");
+		
 		List<License> licenses = licenseService.findAllLicenses();
 		
 		// No DTO mapping needed, just serialize license directly.
@@ -72,6 +82,9 @@ public class RestController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/policy")
 	public @ResponseBody List<LicensePolicyDTO> getAllLicensePolicies() {
+		
+		logger.info("/rest/policy");
+		
 		List<LicensePolicy> policies = licenseService.findLicensePolicies();
 		List<LicensePolicyDTO> dtos = DTOMapperUtil.createDTOList(LicensePolicyDTO.class, policies);
 		
@@ -87,6 +100,8 @@ public class RestController {
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/permissions/{policyId}")
 	public @ResponseBody List<LicensePermissionDTO> getAllPermissionsForPolicy(@PathVariable(value="policyId") String policyId) {
+		
+		logger.info("/rest/permissions/" + policyId);
 		
 		List<LicensePermission> permissions = licenseService.findLicensePermissions(policyId);
 		List<LicensePermissionDTO> dtoList = DTOMapperUtil.createDTOList(LicensePermissionDTO.class, permissions);

@@ -7,8 +7,7 @@ Ext.define('AM.store.ArtifactsStore', {
    		type : 'rest',
    		url  : SERVER_ROOT + 'artifact',
    		reader: {
-            type: 'json',
-            root: 'artifacts'
+            type: 'json'
         },
         
         listeners: {

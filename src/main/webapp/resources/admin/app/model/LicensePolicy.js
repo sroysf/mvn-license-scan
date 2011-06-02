@@ -3,9 +3,5 @@ Ext.define('AM.model.LicensePolicy', {
     
     fields: [{name: 'id', type: 'string'},
              {name: 'name', type: 'string'}
-    ],
-    
-    associations: [
- 	    {type : 'hasMany', model: 'LicensePermission', name: 'permissions'}
-   	]
+    ]
 });
