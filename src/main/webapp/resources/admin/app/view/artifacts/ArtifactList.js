@@ -13,5 +13,7 @@ Ext.define('AM.view.artifacts.ArtifactList' ,{
     	            ];
     	
         this.callParent(arguments);
+        
+        this.store.load();
     }
 });
