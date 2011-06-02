@@ -12,20 +12,12 @@ public class LicensePolicyDTO extends BaseDTO {
 	
 	private String name;
 	
-	private List<LicensePermissionDTO> licensePermissionsList;
-
 	public LicensePolicyDTO() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	public LicensePolicyDTO(LicensePolicy lp) {
 		copyProperties(lp, this);
-		
-		licensePermissionsList = new ArrayList<LicensePermissionDTO>();
-		for (LicensePermission perm : lp.getLicensePermissions()) {
-			LicensePermissionDTO dto = new LicensePermissionDTO(perm);
-			licensePermissionsList.add(dto);
-		}
 	}
 	
 	public String getId() {
@@ -42,9 +34,5 @@ public class LicensePolicyDTO extends BaseDTO {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<LicensePermissionDTO> getLicensePermissionsList() {
-		return licensePermissionsList;
 	}
 }
