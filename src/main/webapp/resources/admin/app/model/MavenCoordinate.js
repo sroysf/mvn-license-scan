@@ -7,8 +7,30 @@ Ext.define('AM.model.MavenCoordinate', {
              {name : 'version', type: 'string'},
              {name : 'licenseInfoSource', type: 'string'},
              {name : 'licenseId', type: 'string'}
-    ]
-
+    ],
+    
+    proxy: {
+   		type : 'rest',
+   		url  : SERVER_ROOT + 'artifact',
+   		reader: {
+            type: 'json'
+        },
+        
+        listeners: {
+        	exception: {
+        		fn : function (proxy, response, operation) {
+        			console.log('Completed request to artifacts service');
+        			if (response.status != 200) {
+	        			console.log("Caught an exception from server ");
+	        			for (x in response) {
+	        				console.log(x + ' -> ' + response[x]);
+	        			}
+        			}
+        		}
+        	}
+        }
+   	}
+    
 	// http://stackoverflow.com/questions/1810311/ext-js-columnmodel-binding-to-a-complex-json-object
 	// http://stackoverflow.com/questions/5711992/extjs-null-safe-retrieval-of-complex-objects-using-jsonreader
 	// This type of mapping of the nested license works ok inbound, but may

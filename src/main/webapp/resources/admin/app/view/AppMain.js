@@ -7,7 +7,7 @@ Ext.define('AM.view.AppMain' ,{
     //width: 950,
     //height: 800,
     animCollapse: true,
-    activeTab: 0,
+    activeTab: 2,
     
     renderTo: document.body,
     
