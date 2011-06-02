@@ -12,7 +12,5 @@ Ext.define('AM.view.licenses.LicenseList' ,{
     	            ];
     	
         this.callParent(arguments);
-        
-        this.store.load();
     }
 });
