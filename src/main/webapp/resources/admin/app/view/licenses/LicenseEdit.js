@@ -1,10 +1,11 @@
-Ext.define('AM.view.user.Edit', {
+Ext.define('AM.view.licenses.LicenseEdit', {
     extend: 'Ext.window.Window',
-    alias : 'widget.useredit',
+    alias : 'widget.licenseEdit',
 
-    title : 'Edit User',
+    title : 'License',
     layout: 'fit',
-    autoShow: true,
+    autoShow: false,
+    modal:true,
 
     initComponent: function() {
         this.items = [
@@ -15,12 +16,13 @@ Ext.define('AM.view.user.Edit', {
                         xtype: 'textfield',
                         name : 'name',
                         fieldLabel: 'Name',
-                        grow:true
+                        width:500
                     },
                     {
                         xtype: 'textfield',
-                        name : 'email',
-                        fieldLabel: 'Email'
+                        name : 'url',
+                        fieldLabel: 'URL',
+                        width:500
                     }
                 ]
             }

@@ -5,7 +5,7 @@ Ext.define('AM.controller.LicensesController', {
 
 	models : [ 'License' ],
 
-	views : [ 'licenses.LicenseList', 'licenses.LicenseManagerView' ],
+	views : [ 'licenses.LicenseList', 'licenses.LicenseManagerView', 'licenses.LicenseEdit' ],
 
 	refs : [ {
 		ref : 'editButton',
@@ -13,7 +13,7 @@ Ext.define('AM.controller.LicensesController', {
 	}, {
 		ref : 'licenseGrid',
 		selector : 'licensesList'
-	} ],
+	}],
 
 	init : function() {
 		this.control({
@@ -26,7 +26,11 @@ Ext.define('AM.controller.LicensesController', {
 			},
 			'licensesList button[action=new]' : {
 				click : this.createNewLicense
+			},
+			'licenseEdit button[action=save]' : {
+				click : this.saveLicense
 			}
+
 		});
 	},
 
@@ -37,24 +41,59 @@ Ext.define('AM.controller.LicensesController', {
 	},
 	
 	doubleClickEdit:function(model, record) {
-		var licenseId = record.get('id');
-		this.editLicense(licenseId);
+		console.log("Editing record : " + record);
+		this.editLicense(record);
 	},
 
 	editSelected : function() {
 		var grid = this.getLicenseGrid();
 		var selectedItem = grid.getSelectionModel().getSelection()[0];
 		
-		var licenseId = selectedItem.get('id');
-		this.editLicense(licenseId);
+		this.editLicense(selectedItem);
 	},
 	
-	editLicense: function (licenseId) {
-		console.log("Starting edit of license id : " + licenseId);
+	editLicense: function (license) {
+		console.log("Starting edit of license id : " + license.get('id'));
+		var editWin = Ext.widget('licenseEdit');
+		
+		
+		editWin.down('form').loadRecord(license);
+		editWin.show();
 	},
 	
 	createNewLicense: function() {
 		console.log("Creating new license");
+		var editWin = Ext.widget('licenseEdit');
+		var license = Ext.create('AM.model.License');
+		editWin.down('form').loadRecord(license);
+		editWin.show();
+	},
+	
+	saveLicense: function (button) {
+		var win = button.up('window');
+		var form   = win.down('form');
+        var license = form.getRecord();
+        var values = form.getValues();
+        license.set(values);
+        
+		console.log("Saving :");
+		console.log(values);
+		
+		var licensesStore = Ext.data.StoreManager.lookup('LicensesStore');
+		
+		if (license.get('id') == "") {
+			// Only add to the store if we are able to save to server first. Make sure id
+			// properly exists before inserting into store.
+			// Also, try to get the grid to scroll
+			license.set('id', "" + Math.random()); // This is fake simulation
+			
+			licensesStore.insert(licensesStore.getCount(), license);
+		}
+		
+		win.close();
+
+		//licensesStore.sync();
+		
 	}
 
 /*
