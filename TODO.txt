@@ -39,38 +39,7 @@ Longer term
 Notes
 ************************
 
-Some code to verify my understanding of underlying stores, id's, and models.
-
-var store = Ext.data.StoreManager.lookup('ArtifactsStore');
-    	console.log('Loading artifacts store...');
-    	store.load({
-    		scope : this,
-    		callback : function(records, operation, success) {
-    			console.log("MVN Records : " + records);
-    			console.log("MVN Success : " + success)
-    			
-    			// Now load all the licenses
-    			var licensesStore = Ext.data.StoreManager.lookup('LicensesStore');
-    			console.log("License store : " + licensesStore);
-    			licensesStore.load({
-    				scope : this,
-    	    		callback : function(licenseRecords, licenseOperation, licenseSuccess) {
-    	    			
-    	    			console.log("License Records : " + records);
-    	    			console.log("License Success : " + success)
-    	    			
-    	    			var coord = records[0];
-    	    			var licenseId = coord.get('licenseId');
-    	    			console.log("Searching for license id : " + licenseId);
-    	    			
-    	    			for (i=0; i < licenseRecords.length; i++) {
-    	    				var license = licenseRecords[i];
-    	    				console.log(license.get('id'));
-    	    			}
-    	    			
-    	    			var foundLicense = licensesStore.getById(licenseId);
-    	    			console.log("Store lookup = " + foundLicense.get('name'));
-    	    		}
-    			});
-    		}
-    	});
+- Add new license
+- Edit license
+- Edit maven artifact
+- Add new artifact
