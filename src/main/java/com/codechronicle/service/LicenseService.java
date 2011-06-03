@@ -42,7 +42,9 @@ public class LicenseService {
 	public License addOrUpdateLicense(License license) {
 		
 		if (license.getId() != null) {
-			em.merge(license);
+			System.out.println("********************* START *******************");
+			license = em.merge(license);
+			System.out.println("********************* END *******************");
 		} else {
 			em.persist(license);
 		}

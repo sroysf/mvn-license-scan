@@ -14,12 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.codechronicle.dto.BaseDTO;
 import com.codechronicle.dto.DTOMapperUtil;
+import com.codechronicle.dto.LicenseDTO;
 import com.codechronicle.dto.LicensePermissionDTO;
 import com.codechronicle.dto.LicensePolicyDTO;
 import com.codechronicle.dto.MavenCoordinateDTO;
@@ -38,7 +40,8 @@ public class RestController {
 	@Inject
 	LicenseService licenseService;
 
-	// Various finder methods
+	//************************************
+	// Various finder methods - GET
 	
 	/**
 	 * Get all known artifacts.
@@ -47,7 +50,7 @@ public class RestController {
 	@RequestMapping(method=RequestMethod.GET, value="/artifact")
 	public @ResponseBody Collection<MavenCoordinateDTO> getAllArtifacts() {
 		
-		logger.info("/rest/artifact");
+		logger.info("//GET /rest/artifact");
 		
 		List<MavenCoordinate> coords = licenseService.findAllMavenCoordinates();
 		
@@ -67,7 +70,7 @@ public class RestController {
 	@RequestMapping(method=RequestMethod.GET, value="/license")
 	public @ResponseBody Collection<License> getAllLicenses() {
 		
-		logger.info("/rest/license");
+		logger.info("//GET /rest/license");
 		
 		List<License> licenses = licenseService.findAllLicenses();
 		
@@ -83,7 +86,7 @@ public class RestController {
 	@RequestMapping(method=RequestMethod.GET, value="/policy")
 	public @ResponseBody List<LicensePolicyDTO> getAllLicensePolicies() {
 		
-		logger.info("/rest/policy");
+		logger.info("//GET /rest/policy");
 		
 		List<LicensePolicy> policies = licenseService.findLicensePolicies();
 		List<LicensePolicyDTO> dtos = DTOMapperUtil.createDTOList(LicensePolicyDTO.class, policies);
@@ -101,11 +104,56 @@ public class RestController {
 	@RequestMapping(method=RequestMethod.GET, value="/permissions/{policyId}")
 	public @ResponseBody List<LicensePermissionDTO> getAllPermissionsForPolicy(@PathVariable(value="policyId") String policyId) {
 		
-		logger.info("/rest/permissions/" + policyId);
+		logger.info("//GET /rest/permissions/" + policyId);
 		
 		List<LicensePermission> permissions = licenseService.findLicensePermissions(policyId);
 		List<LicensePermissionDTO> dtoList = DTOMapperUtil.createDTOList(LicensePermissionDTO.class, permissions);
 		
 		return dtoList;
+	}
+	
+	//************************************
+	// Create Methods - POST
+	
+	/**
+	 * Get all known licenses
+	 * Example : /rest/license
+	 */
+	@RequestMapping(method=RequestMethod.POST, value="/license")
+	public @ResponseBody LicenseDTO createLicense(@RequestBody LicenseDTO reqDTO) {
+		
+		logger.info("//POST /rest/license");
+		logger.info("REQ received : " + reqDTO);
+		
+		LicenseDTO responseDTO = saveLicense(reqDTO);
+		
+		return responseDTO;
+	}
+	
+	//************************************
+	// Update Methods - PUT
+	
+	/**
+	 * Get all known licenses
+	 * Example : /rest/license
+	 */
+	@RequestMapping(method=RequestMethod.PUT, value="/license/{licenseId}")
+	public @ResponseBody LicenseDTO updateLicense(@RequestBody LicenseDTO reqDTO) {
+		
+		logger.info("//PUT /rest/license");
+		logger.info("REQ received : " + reqDTO);
+		
+		LicenseDTO responseDTO = saveLicense(reqDTO);
+		
+		return responseDTO;
+	}
+
+	private LicenseDTO saveLicense(LicenseDTO reqDTO) {
+		License license = new License(reqDTO);
+		license = licenseService.addOrUpdateLicense(license);
+		
+		LicenseDTO responseDTO = new LicenseDTO(license);
+		logger.info("RESPONSE : " + responseDTO);
+		return responseDTO;
 	}
 }

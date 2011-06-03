@@ -4,6 +4,8 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 public class DTOMapperUtil {
 
 	public static <X,T> List<X> createDTOList(Class<X> clazz, List<T> mos) {
@@ -28,5 +30,13 @@ public class DTOMapperUtil {
 		}
 		
 		return dtoList;
+	}
+	
+	public static void copyProperties(Object src, Object dest) {
+		try {
+			BeanUtils.copyProperties(dest, src);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} 
 	}
 }

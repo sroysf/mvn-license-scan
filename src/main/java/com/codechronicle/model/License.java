@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.codechronicle.dto.DTOMapperUtil;
+import com.codechronicle.dto.LicenseDTO;
+
 /**
  * This entity describes a specific instance of a license. For example, "Apache 2". For simplicity, we do
  * not incorporate pseudonyms (since there isn't really a standard for how different projects refer to the
@@ -31,8 +34,15 @@ public class License {
 		this.url = url.toUpperCase();
 	}
 	
+	public License(LicenseDTO dto) {
+		DTOMapperUtil.copyProperties(dto, this);
+	}
+	
 	public String getId() {
 		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {

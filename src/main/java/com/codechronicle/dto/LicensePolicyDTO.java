@@ -1,9 +1,5 @@
 package com.codechronicle.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
 
 public class LicensePolicyDTO extends BaseDTO {
@@ -17,7 +13,7 @@ public class LicensePolicyDTO extends BaseDTO {
 	}
 	
 	public LicensePolicyDTO(LicensePolicy lp) {
-		copyProperties(lp, this);
+		DTOMapperUtil.copyProperties(lp, this);
 	}
 	
 	public String getId() {

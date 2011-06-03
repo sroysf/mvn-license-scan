@@ -5,13 +5,8 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 
 public class BaseDTO {
-	protected void copyProperties(Object src, Object dest) {
-		try {
-			BeanUtils.copyProperties(dest, src);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} 
-	}
+	
+	private boolean success = true;
 	
 	@Override
 	public String toString() {
@@ -21,5 +16,13 @@ public class BaseDTO {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 }

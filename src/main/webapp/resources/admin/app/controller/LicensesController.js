@@ -82,18 +82,21 @@ Ext.define('AM.controller.LicensesController', {
 		var licensesStore = Ext.data.StoreManager.lookup('LicensesStore');
 		
 		if (license.get('id') == "") {
-			// Only add to the store if we are able to save to server first. Make sure id
-			// properly exists before inserting into store.
-			// Also, try to get the grid to scroll
-			license.set('id', "" + Math.random()); // This is fake simulation
 			
-			licensesStore.insert(licensesStore.getCount(), license);
+			console.log("Saving new entry : " + savedLicense);
+			license.save({
+				success: function(savedLicense) {
+					console.log("Got back : " + savedLicense);
+					console.log("Generated id : " + savedLicense.get('id'));
+					licensesStore.insert(licensesStore.getCount(), savedLicense);
+				}
+			});
+		} else {
+			console.log("Synchronizing updates from store to server");
+			licensesStore.sync();
 		}
 		
 		win.close();
-
-		//licensesStore.sync();
-		
 	}
 
 /*

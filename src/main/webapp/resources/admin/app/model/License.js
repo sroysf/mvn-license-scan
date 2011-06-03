@@ -10,7 +10,10 @@ Ext.define('AM.model.License', {
    		type : 'rest',
    		url  : SERVER_ROOT + 'license',
    		reader: {
-            type: 'json'
+            type: 'json',
+            successProperty: 'success',
+            idProperty: 'id',
+            root: undefined
         },
         
         listeners: {
