@@ -2,7 +2,9 @@ Ext.define('AM.view.licenses.LicenseList' ,{
     extend: 'Ext.grid.Panel',
     alias : 'widget.licensesList',
     
-    height: 600,
+    height: 400,
+    
+    autoScroll : true,
 
     fbar: [
            { type: 'button', 

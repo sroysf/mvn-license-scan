@@ -83,7 +83,7 @@ Ext.define('AM.controller.LicensesController', {
 		
 		if (license.get('id') == "") {
 			
-			console.log("Saving new entry : " + savedLicense);
+			console.log("Saving new entry : " + license);
 			license.save({
 				success: function(savedLicense) {
 					console.log("Got back : " + savedLicense);

@@ -13,7 +13,7 @@ public class LicenseDTO extends BaseDTO {
 	}
 	
 	public LicenseDTO(License license) {
-		DTOMapperUtil.copyProperties(license, this);
+		BeanMapperUtil.copyProperties(license, this);
 	}
 	
 	public String getId() {

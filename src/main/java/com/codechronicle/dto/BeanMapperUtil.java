@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-public class DTOMapperUtil {
+public class BeanMapperUtil {
 
 	public static <X,T> List<X> createDTOList(Class<X> clazz, List<T> mos) {
 		

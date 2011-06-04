@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.codechronicle.dto.BaseDTO;
-import com.codechronicle.dto.DTOMapperUtil;
+import com.codechronicle.dto.BeanMapperUtil;
 import com.codechronicle.dto.LicenseDTO;
 import com.codechronicle.dto.LicensePermissionDTO;
 import com.codechronicle.dto.LicensePolicyDTO;
@@ -89,7 +89,7 @@ public class RestController {
 		logger.info("//GET /rest/policy");
 		
 		List<LicensePolicy> policies = licenseService.findLicensePolicies();
-		List<LicensePolicyDTO> dtos = DTOMapperUtil.createDTOList(LicensePolicyDTO.class, policies);
+		List<LicensePolicyDTO> dtos = BeanMapperUtil.createDTOList(LicensePolicyDTO.class, policies);
 		
 		return dtos;
 	}
@@ -107,7 +107,7 @@ public class RestController {
 		logger.info("//GET /rest/permissions/" + policyId);
 		
 		List<LicensePermission> permissions = licenseService.findLicensePermissions(policyId);
-		List<LicensePermissionDTO> dtoList = DTOMapperUtil.createDTOList(LicensePermissionDTO.class, permissions);
+		List<LicensePermissionDTO> dtoList = BeanMapperUtil.createDTOList(LicensePermissionDTO.class, permissions);
 		
 		return dtoList;
 	}

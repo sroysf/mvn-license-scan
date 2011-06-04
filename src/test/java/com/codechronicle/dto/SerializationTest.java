@@ -32,35 +32,18 @@ public class SerializationTest {
 	@Test
 	public void testBeanMapping() {
 		
-		/*LicenseDTO dto = new LicenseDTO();
-		String id = "a0Ex0000000CeiPEAS"; 
+		String id = "a0Ex0000000CeiPEAS";
+		
+		LicenseDTO dto = new LicenseDTO();
 		dto.setId(id);
-		dto.setName("MAKING A MODIFICATION");
+		dto.setName("TESTING WITHOUT MERGE");
 		dto.setUrl("http://some.bogus.url");
 		
-		License license = new License(dto);
-		license = licenseService.addOrUpdateLicense(license);
+		License detachedLicense = new License(dto);
 		
-		System.out.println("Sent in ID  : " + id);
-		System.out.println("Got back ID : " + license.getId());*/
+		License mergedEntity = licenseService.addOrUpdateLicense(detachedLicense);
 		
-		License existingLicense = em.find(License.class, "a0Ex0000000CeiPEAS");
-		System.out.println("Here are the existing entity values: ");
-		System.out.println(existingLicense.getId());
-		System.out.println(existingLicense.getName());
-		System.out.println(existingLicense.getUrl());
-		
-		License detachedEntity = new License("Some new name", "and a new url");
-		detachedEntity.setId(existingLicense.getId());
-		
-		License mergedEntity = saveDetachedEntity(detachedEntity);
-		System.out.println("Here are the merged entity values: ");
-		System.out.println(mergedEntity.getId());
-		System.out.println(mergedEntity.getName());
-		System.out.println(mergedEntity.getUrl());
-		
-		String expectedId = existingLicense.getId();
-		Assert.assertEquals(expectedId, mergedEntity.getId());
+		Assert.assertEquals(id, mergedEntity.getId());
 	}
 	
 	@Transactional

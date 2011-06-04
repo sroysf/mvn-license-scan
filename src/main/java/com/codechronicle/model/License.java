@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.codechronicle.dto.DTOMapperUtil;
+import com.codechronicle.dto.BeanMapperUtil;
 import com.codechronicle.dto.LicenseDTO;
 
 /**
@@ -35,7 +35,7 @@ public class License {
 	}
 	
 	public License(LicenseDTO dto) {
-		DTOMapperUtil.copyProperties(dto, this);
+		BeanMapperUtil.copyProperties(dto, this);
 	}
 	
 	public String getId() {

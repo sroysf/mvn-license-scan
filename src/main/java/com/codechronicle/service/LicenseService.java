@@ -9,11 +9,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.codechronicle.dto.BeanMapperUtil;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -42,9 +44,18 @@ public class LicenseService {
 	public License addOrUpdateLicense(License license) {
 		
 		if (license.getId() != null) {
-			System.out.println("********************* START *******************");
-			license = em.merge(license);
-			System.out.println("********************* END *******************");
+			// This mapping is necessary due to the current Datanucleus known issue 
+			// about EntityManager.merge(). Instead, find the existing entity within the
+			// same transaction and set its properties
+			License existingLicense = em.find(License.class, license.getId());
+			if (existingLicense != null) {
+				BeanMapperUtil.copyProperties(license, existingLicense);
+			} else {
+				// This should be very unlikely, but just in case, go ahead and create a new entity
+				// and issue a warning.
+				log.warn("Attemped to modify License with id : " + license.getId() + ", but entity was not found. Creating new entity");
+				license = em.merge(license);
+			}
 		} else {
 			em.persist(license);
 		}

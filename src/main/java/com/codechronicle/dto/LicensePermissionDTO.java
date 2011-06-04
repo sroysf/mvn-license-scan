@@ -17,7 +17,7 @@ public class LicensePermissionDTO extends BaseDTO {
 	}
 	
 	public LicensePermissionDTO(LicensePermission lp) {
-		DTOMapperUtil.copyProperties(lp, this);
+		BeanMapperUtil.copyProperties(lp, this);
 		if (lp.getLicense() != null) {
 			licenseId = lp.getLicense().getId();
 		}

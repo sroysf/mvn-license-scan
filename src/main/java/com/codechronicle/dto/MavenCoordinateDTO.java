@@ -17,7 +17,7 @@ public class MavenCoordinateDTO extends BaseDTO {
 	}
 	
 	public MavenCoordinateDTO(MavenCoordinate mvnCoord) {
-		DTOMapperUtil.copyProperties(mvnCoord, this);
+		BeanMapperUtil.copyProperties(mvnCoord, this);
 		if (mvnCoord.getLicense() != null) {
 			this.licenseId = mvnCoord.getLicense().getId();
 		}
