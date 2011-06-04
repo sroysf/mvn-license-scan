@@ -124,7 +124,7 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/license")
-	public @ResponseBody Map<String,Object> createLicense(@RequestBody Map<String,String> reqDTO) {
+	public @ResponseBody Map<String,Object> createLicense(@RequestBody LicenseDTO reqDTO) {
 		
 		logger.info("//POST /rest/license");
 		logger.info("REQ received : " + reqDTO);
