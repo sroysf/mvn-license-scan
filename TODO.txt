@@ -39,7 +39,8 @@ Longer term
 Notes
 ************************
 
-- Add new license
-- Edit license
-- Edit maven artifact
+- Create combobox of licenses
+- Incorporate that into an artifact edit form
+- Add everything like we did for licenses for crud operations
 - Add new artifact
+- Edit maven artifact
