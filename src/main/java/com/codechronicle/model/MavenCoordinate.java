@@ -8,6 +8,9 @@ import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.codechronicle.dto.BeanMapperUtil;
+import com.codechronicle.dto.MavenCoordinateDTO;
+
 /**
  * This class describes a specific maven coordinate. This should constitute the bulk of the data stored
  * in the license database. 
@@ -32,6 +35,10 @@ public class MavenCoordinate {
 	
 	public MavenCoordinate () {
 		
+	}
+	
+	public MavenCoordinate (MavenCoordinateDTO dto) {
+		BeanMapperUtil.copyProperties(dto, this);
 	}
 	
 	public MavenCoordinate(String groupId, String artifactId, String version) {

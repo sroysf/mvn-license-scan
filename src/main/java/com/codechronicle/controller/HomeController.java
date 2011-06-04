@@ -1,10 +1,14 @@
 package com.codechronicle.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.codechronicle.dto.BeanMapperUtil;
+import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePolicy;
 import com.codechronicle.model.LicenseQueryResponse;
 import com.codechronicle.model.LicenseQueryResponseItem;
@@ -31,6 +37,35 @@ public class HomeController {
 	@Inject
 	LicenseService licenseService;
 
+	
+	@RequestMapping(method=RequestMethod.GET, value="/jsonTest")
+	public @ResponseBody Map<String,String> jsonTest() {
+		Map<String,String> jsonMap = new HashMap<String, String>();
+		
+		License license  = licenseService.findLicenseById("a0Ex0000000Cefy");
+		log.info("Found license : " + license);
+		
+		MavenCoordinate mvn = new MavenCoordinate("com.saptarshi", "dtomapper", "1.0-SNAPSHOT");
+		mvn.setLicense(license);
+		
+		Map desc = null;
+		
+		try {
+			desc = BeanUtils.describe(mvn);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return desc;
+	}
+	
 	
 	/**
 	 * 

@@ -2,6 +2,18 @@ Ext.define('AM.view.artifacts.ArtifactList' ,{
     extend: 'Ext.grid.Panel',
     alias : 'widget.artifactsList',
 
+    
+    fbar: [
+           { type: 'button', 
+        	 text: 'New Artifact',
+        	 action: 'new'},
+        	 
+           { type: 'button', 
+	       	 text: 'Edit Selected',
+	       	 disabled : true,
+             action: 'edit'}
+         ],
+         
     initComponent: function() {
     	
     	var licensesStore = Ext.data.StoreManager.lookup('LicensesStore');

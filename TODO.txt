@@ -39,8 +39,7 @@ Longer term
 Notes
 ************************
 
-- Create combobox of licenses
-- Incorporate that into an artifact edit form
 - Add everything like we did for licenses for crud operations
 - Add new artifact
 - Edit maven artifact
+- Add an optional version field to the license and incorporate that to remove ambiguity

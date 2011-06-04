@@ -25,6 +25,8 @@ import com.codechronicle.dto.LicenseDTO;
 import com.codechronicle.dto.LicensePermissionDTO;
 import com.codechronicle.dto.LicensePolicyDTO;
 import com.codechronicle.dto.MavenCoordinateDTO;
+import com.codechronicle.dtomapper.BeanUtilsDTOMapper;
+import com.codechronicle.dtomapper.DTOMapper;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -36,6 +38,8 @@ import com.codechronicle.service.LicenseService;
 public class RestController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EntityController.class);
+	
+	private DTOMapper dtoMapper = new BeanUtilsDTOMapper("com.codechronicle");
 	
 	@Inject
 	LicenseService licenseService;
@@ -68,15 +72,15 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/license")
-	public @ResponseBody Collection<License> getAllLicenses() {
+	public @ResponseBody List<Map<String,Object>> getAllLicenses() {
 		
 		logger.info("//GET /rest/license");
 		
 		List<License> licenses = licenseService.findAllLicenses();
 		
-		// No DTO mapping needed, just serialize license directly.
+		List<Map<String,Object>> dtoResponse = dtoMapper.fromModelCollection(licenses);
 		
-		return licenses;
+		return dtoResponse;
 	}
 	
 	/**
@@ -116,25 +120,43 @@ public class RestController {
 	// Create Methods - POST
 	
 	/**
-	 * Get all known licenses
+	 * Create new license
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/license")
-	public @ResponseBody LicenseDTO createLicense(@RequestBody LicenseDTO reqDTO) {
+	public @ResponseBody Map<String,Object> createLicense(@RequestBody Map<String,String> reqDTO) {
 		
 		logger.info("//POST /rest/license");
 		logger.info("REQ received : " + reqDTO);
 		
 		LicenseDTO responseDTO = saveLicense(reqDTO);
+		Map<String,Object> response = dtoMapper.fromModel(responseDTO);
+		response.put("success", "true");
+		
+		return response;
+	}
+	
+	/**
+	 * Create a new artifact
+	 * Example : /rest/license
+	 */
+	@RequestMapping(method=RequestMethod.POST, value="/artifact")
+	public @ResponseBody MavenCoordinateDTO createArtifact(@RequestBody MavenCoordinateDTO reqDTO) {
+		
+		logger.info("//POST /rest/license");
+		logger.info("REQ received : " + reqDTO);
+		
+		MavenCoordinateDTO responseDTO = saveArtifact(reqDTO);
 		
 		return responseDTO;
 	}
+	
 	
 	//************************************
 	// Update Methods - PUT
 	
 	/**
-	 * Get all known licenses
+	 * Update license
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.PUT, value="/license/{licenseId}")
@@ -148,11 +170,23 @@ public class RestController {
 		return responseDTO;
 	}
 
+	//************************************
+	// Common helper methods
+	
 	private LicenseDTO saveLicense(LicenseDTO reqDTO) {
 		License license = new License(reqDTO);
 		license = licenseService.addOrUpdateLicense(license);
 		
 		LicenseDTO responseDTO = new LicenseDTO(license);
+		logger.info("RESPONSE : " + responseDTO);
+		return responseDTO;
+	}
+	
+	private MavenCoordinateDTO saveArtifact(MavenCoordinateDTO reqDTO) {
+		MavenCoordinate mvnCoord = new MavenCoordinate(reqDTO);
+		mvnCoord = licenseService.addOrUpdateMavenCoordinate(mvnCoord);
+		
+		MavenCoordinateDTO responseDTO = new MavenCoordinateDTO(mvnCoord);
 		logger.info("RESPONSE : " + responseDTO);
 		return responseDTO;
 	}
