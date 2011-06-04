@@ -27,6 +27,7 @@ import com.codechronicle.dto.LicensePolicyDTO;
 import com.codechronicle.dto.MavenCoordinateDTO;
 import com.codechronicle.dtomapper.BeanUtilsDTOMapper;
 import com.codechronicle.dtomapper.DTOMapper;
+import com.codechronicle.dtomapper.DataTransferObject;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -72,13 +73,13 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/license")
-	public @ResponseBody List<Map<String,Object>> getAllLicenses() {
+	public @ResponseBody List<DataTransferObject> getAllLicenses() {
 		
 		logger.info("//GET /rest/license");
 		
 		List<License> licenses = licenseService.findAllLicenses();
 		
-		List<Map<String,Object>> dtoResponse = dtoMapper.fromModelCollection(licenses);
+		List<DataTransferObject> dtoResponse = dtoMapper.fromModelCollection(licenses);
 		
 		return dtoResponse;
 	}
@@ -124,13 +125,13 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/license")
-	public @ResponseBody Map<String,Object> createLicense(@RequestBody LicenseDTO reqDTO) {
+	public @ResponseBody DataTransferObject createLicense(@RequestBody LicenseDTO reqDTO) {
 		
 		logger.info("//POST /rest/license");
 		logger.info("REQ received : " + reqDTO);
 		
 		LicenseDTO responseDTO = saveLicense(reqDTO);
-		Map<String,Object> response = dtoMapper.fromModel(responseDTO);
+		DataTransferObject response = dtoMapper.fromModel(responseDTO);
 		response.put("success", "true");
 		
 		return response;
