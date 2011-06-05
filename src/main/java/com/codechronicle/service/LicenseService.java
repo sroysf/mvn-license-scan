@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
@@ -154,8 +155,16 @@ public class LicenseService extends EntityService {
 	@Transactional
 	public List<LicensePermission> findLicensePermissions(String policyId) {
 		
-		LicensePolicy policy = findById(LicensePolicy.class, policyId);
-		List<LicensePermission> perms = policy.getLicensePermissions();
+		
+		// This is how you might normally do it, but there currently seems to be a bug that results
+		// in all the License and Artifact references being null.
+		//LicensePolicy policy = findById(LicensePolicy.class, policyId);
+		//List<LicensePermission> perms = policy.getLicensePermissions();
+		
+		// Here is the workaround:
+		
+		Query query = em.createQuery("SELECT lp FROM LicensePermission lp WHERE policy.id = ?1").setParameter(1, policyId);
+		List<LicensePermission> perms = query.getResultList();
 		
 		return perms;
 	}

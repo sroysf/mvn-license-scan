@@ -107,7 +107,7 @@ public class RestController {
 	 * Example : /rest/policy
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/permission")
-	public @ResponseBody List<DataTransferObject> getAllLicensePermissions(@RequestParam(value="policyId") String policyId) {
+	public @ResponseBody List<DataTransferObject> getLicensePermissions(@RequestParam(value="policyId") String policyId) {
 		
 		logger.info("//GET /rest/permission  policyId = " + policyId);
 		List<LicensePermission> perms = licenseService.findLicensePermissions(policyId);
