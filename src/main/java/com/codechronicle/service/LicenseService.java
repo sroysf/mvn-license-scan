@@ -150,11 +150,14 @@ public class LicenseService extends EntityService {
 		return mavenCoordinate;
 	}
 	
+	// Transactional required to avoid lazy loading exception
+	@Transactional
 	public List<LicensePermission> findLicensePermissions(String policyId) {
-		TypedQuery<LicensePermission> query = em.createQuery("Select l from LicensePermission l where license.id = ?1", LicensePermission.class);
-		query.setParameter(1, policyId);
-		List<LicensePermission> permissions = query.getResultList();
-		return permissions;
+		
+		LicensePolicy policy = findById(LicensePolicy.class, policyId);
+		List<LicensePermission> perms = policy.getLicensePermissions();
+		
+		return perms;
 	}
 	
 	public License findLicenseByNameAndURL(String licenseName, String licenseURL) {

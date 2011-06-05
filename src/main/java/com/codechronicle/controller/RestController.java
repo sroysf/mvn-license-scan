@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.codechronicle.dto.BeanMapperUtil;
@@ -105,27 +107,11 @@ public class RestController {
 	 * Example : /rest/policy
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/permission")
-	public @ResponseBody List<DataTransferObject> getAllLicensePermissions() {
+	public @ResponseBody List<DataTransferObject> getAllLicensePermissions(@RequestParam(value="policyId") String policyId) {
 		
-		logger.info("//GET /rest/policy");
-		
-		return getAllEntities(LicensePermission.class);
-	}
-	
-	/**
-	 * Get all permissions that have been explicitly set for a given policy.
-	 * Example : /rest/permissions/a0Dx00000008mJdEAI
-	 * 
-	 * @param policyId
-	 * @return
-	 */
-	@RequestMapping(method=RequestMethod.GET, value="/permissions/{policyId}")
-	public @ResponseBody List<LicensePermissionDTO> getAllPermissionsForPolicy(@PathVariable(value="policyId") String policyId) {
-		
-		logger.info("//GET /rest/permissions/" + policyId);
-		
-		List<LicensePermission> permissions = licenseService.findLicensePermissions(policyId);
-		List<LicensePermissionDTO> dtoList = BeanMapperUtil.createDTOList(LicensePermissionDTO.class, permissions);
+		logger.info("//GET /rest/permission  policyId = " + policyId);
+		List<LicensePermission> perms = licenseService.findLicensePermissions(policyId);
+		List<DataTransferObject> dtoList = dtoMapper.fromModelCollection(perms, false);
 		
 		return dtoList;
 	}

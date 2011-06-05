@@ -75,7 +75,7 @@ Ext.define('AM.view.AppMain' ,{
         },{
             xtype: 'artifactsManager',
         },{
-            xtype: 'licensePolicyList'
+            xtype: 'permissionsManager'
             //title: 'Permissions',
         }];
     	

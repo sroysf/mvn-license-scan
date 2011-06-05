@@ -39,8 +39,9 @@ Longer term
 Issues
 ************************
 
-If you make a controller method transactional, the id doesn't show up for a new entity until after the commit.
+- If you make a controller method transactional, the id doesn't show up for a new entity until after the commit.
 Flush might help this.
+- Command line for enhancement, data nucleus plugin
 
 ************************
 Notes
