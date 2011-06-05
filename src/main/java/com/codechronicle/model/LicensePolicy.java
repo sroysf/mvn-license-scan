@@ -3,6 +3,7 @@ package com.codechronicle.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +28,10 @@ public class LicensePolicy {
 	
 	@OneToMany(mappedBy="policy")
 	private List<LicensePermission> licensePermissions;
+	
+	public LicensePolicy() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public LicensePolicy(String name) {
 		super();

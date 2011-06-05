@@ -46,14 +46,11 @@ Flush might help this.
 Notes
 ************************
 
-- If writable method is null, throw an error
-- Can we templatize and genericize the addOrUpdate code in LicenseService?
-
-- Add interface for resolving id related objects
-	- Refactor so that service deals with DTO objects in and out
-	- Figure out transaction boundary requirement
-
-- Add everything like we did for licenses for crud operations
-- Add new artifact
-- Edit maven artifact
 - Add an optional version field to the license and incorporate that to remove ambiguity
+
+************************
+Mapper issues
+************************
+
+- If writable method is null, throw an error
+- toModel needs to support multiple model entity resolvers, one for each type of object referenced

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codechronicle.dto.BeanMapperUtil;
+import com.codechronicle.model.LicensePolicy;
 
 @Service
 public class EntityService {
@@ -58,12 +59,14 @@ public class EntityService {
 		return entity;
 	}
 	
+	
 	public <T> List<T> findAll(Class<T> entityClass) {
 		
 		String fullClassName = entityClass.getName();
 		String entityName = fullClassName.substring(fullClassName.lastIndexOf('.')+1);
 		TypedQuery<T> query = em.createQuery("Select x from " + entityName + " x", entityClass);
 		List<T> entityList = query.getResultList();
+		
 		return entityList;
 	}
 	

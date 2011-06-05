@@ -2,6 +2,9 @@ Ext.define('AM.view.artifacts.ArtifactList' ,{
     extend: 'Ext.grid.Panel',
     alias : 'widget.artifactsList',
 
+    height: 400,
+    
+    autoScroll : true,
     
     fbar: [
            { type: 'button', 

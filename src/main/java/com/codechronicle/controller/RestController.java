@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,18 @@ public class RestController {
 	//************************************
 	// Various finder methods - GET
 	
+	private <T> List<DataTransferObject> getAllEntities(Class<T> entityClass, boolean... includeCollections) {
+		List<T> allEntities = licenseService.findAll(entityClass);
+		
+		boolean includeCollectionsParam = true;
+		if (includeCollections.length > 0) {
+			includeCollectionsParam = includeCollections[0];
+		}
+		List<DataTransferObject> entityDTOList = dtoMapper.fromModelCollection(allEntities, includeCollectionsParam);
+		
+		return entityDTOList;
+	}
+	
 	/**
 	 * Get all known artifacts.
 	 * Example : /rest/artifact
@@ -56,11 +69,7 @@ public class RestController {
 	public @ResponseBody List<DataTransferObject> getAllArtifacts() {
 		
 		logger.info("//GET /rest/artifact");
-		
-		List<MavenCoordinate> coords = licenseService.findAll(MavenCoordinate.class);
-		List<DataTransferObject> artifactList = dtoMapper.fromModelCollection(coords);
-		
-		return artifactList;
+		return getAllEntities(MavenCoordinate.class);
 	}
 	
 	/**
@@ -71,12 +80,7 @@ public class RestController {
 	public @ResponseBody List<DataTransferObject> getAllLicenses() {
 		
 		logger.info("//GET /rest/license");
-		
-		List<License> licenses = licenseService.findAll(License.class);
-		
-		List<DataTransferObject> dtoResponse = dtoMapper.fromModelCollection(licenses);
-		
-		return dtoResponse;
+		return getAllEntities(License.class);
 	}
 	
 	/**
@@ -84,14 +88,16 @@ public class RestController {
 	 * Example : /rest/policy
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/policy")
-	public @ResponseBody List<LicensePolicyDTO> getAllLicensePolicies() {
+	public @ResponseBody List<DataTransferObject> getAllLicensePolicies() {
 		
 		logger.info("//GET /rest/policy");
 		
-		List<LicensePolicy> policies = licenseService.findAll(LicensePolicy.class);
-		List<LicensePolicyDTO> dtos = BeanMapperUtil.createDTOList(LicensePolicyDTO.class, policies);
-		
-		return dtos;
+		// Here, we turn off collections because we don't want to eagerly fetch all the permissions
+		// unnecessarily just to list the set of policies.
+		// If you do want the collections returned, make this method transactional (in order to preserve
+		// EntityManager context and avoid lazy initialization exceptions) and then remove the second
+		// parameter to getAllEntities - or set it to true.
+		return getAllEntities(LicensePolicy.class, false);
 	}
 	
 	/**
@@ -197,7 +203,7 @@ public class RestController {
 		//license = licenseService.addOrUpdateLicense(license);
 		license = licenseService.addOrUpdateEntity(license);
 		
-		DataTransferObject responseDTO = dtoMapper.fromModel(license);
+		DataTransferObject responseDTO = dtoMapper.fromModel(license, true);
 		logger.info("RESPONSE : " + responseDTO);
 		return responseDTO;
 	}
@@ -213,7 +219,7 @@ public class RestController {
 		});
 		
 		mvnCoord = licenseService.addOrUpdateEntity(mvnCoord);
-		DataTransferObject responseDTO = dtoMapper.fromModel(mvnCoord); 
+		DataTransferObject responseDTO = dtoMapper.fromModel(mvnCoord, true); 
 		
 		return responseDTO;
 	}
