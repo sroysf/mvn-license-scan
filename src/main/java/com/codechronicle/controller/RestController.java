@@ -57,7 +57,7 @@ public class RestController {
 		
 		logger.info("//GET /rest/artifact");
 		
-		List<MavenCoordinate> coords = licenseService.findAllMavenCoordinates();
+		List<MavenCoordinate> coords = licenseService.findAll(MavenCoordinate.class);
 		List<DataTransferObject> artifactList = dtoMapper.fromModelCollection(coords);
 		
 		return artifactList;
@@ -72,7 +72,7 @@ public class RestController {
 		
 		logger.info("//GET /rest/license");
 		
-		List<License> licenses = licenseService.findAllLicenses();
+		List<License> licenses = licenseService.findAll(License.class);
 		
 		List<DataTransferObject> dtoResponse = dtoMapper.fromModelCollection(licenses);
 		
@@ -88,7 +88,7 @@ public class RestController {
 		
 		logger.info("//GET /rest/policy");
 		
-		List<LicensePolicy> policies = licenseService.findLicensePolicies();
+		List<LicensePolicy> policies = licenseService.findAll(LicensePolicy.class);
 		List<LicensePolicyDTO> dtos = BeanMapperUtil.createDTOList(LicensePolicyDTO.class, policies);
 		
 		return dtos;

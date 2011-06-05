@@ -1,7 +1,10 @@
 package com.codechronicle.service;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.slf4j.Logger;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codechronicle.dto.BeanMapperUtil;
+import com.codechronicle.model.MavenCoordinate;
 
 @Service
 public class EntityService {
@@ -53,5 +57,14 @@ public class EntityService {
 		}
 		
 		return entity;
+	}
+	
+	public <T> List<T> findAll(Class<T> entityClass) {
+		
+		String fullClassName = entityClass.getName();
+		String entityName = fullClassName.substring(fullClassName.lastIndexOf('.')+1);
+		TypedQuery<T> query = em.createQuery("Select x from " + entityName + " x", entityClass);
+		List<T> entityList = query.getResultList();
+		return entityList;
 	}
 }

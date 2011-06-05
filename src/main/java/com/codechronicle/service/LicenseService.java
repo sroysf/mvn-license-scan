@@ -39,25 +39,6 @@ public class LicenseService extends EntityService {
 	}
 
 	@Transactional
-	public List<LicensePermission> addOrUpdateLicensePermissionList(List<LicensePermission> licensePermissions) {
-		
-		if (licensePermissions == null) {
-			return null;
-		}
-		
-		for (LicensePermission licensePermission : licensePermissions) {
-			if (licensePermission.getId() != null) {
-				em.merge(licensePermission);
-			} else {
-				em.persist(licensePermission);
-			}
-		}
-		
-		log.info("Saved all license permissions : " + licensePermissions);
-		return licensePermissions;
-	}
-	
-	@Transactional
 	public LicensePolicy findPolicy(String name) {
 		List<LicensePolicy> results = em.createQuery("Select p from LicensePolicy p where name = :name",LicensePolicy.class).setParameter("name", name).getResultList();
 		if (results.size() == 0) {
@@ -182,12 +163,6 @@ public class LicenseService extends EntityService {
 		}
 	}
 	
-	public List<LicensePolicy> findLicensePolicies() {
-		TypedQuery<LicensePolicy> query = em.createQuery("Select l from LicensePolicy l", LicensePolicy.class);
-		List<LicensePolicy> policies = query.getResultList();
-		return policies;
-	}
-	
 	public List<LicensePermission> findLicensePermissions(String policyId) {
 		TypedQuery<LicensePermission> query = em.createQuery("Select l from LicensePermission l where license.id = ?1", LicensePermission.class);
 		query.setParameter(1, policyId);
@@ -195,18 +170,6 @@ public class LicenseService extends EntityService {
 		return permissions;
 	}
 	
-	public List<MavenCoordinate> findAllMavenCoordinates() {
-		TypedQuery<MavenCoordinate> query = em.createQuery("Select l from MavenCoordinate l", MavenCoordinate.class);
-		List<MavenCoordinate> artifacts = query.getResultList();
-		return artifacts;
-	}
-	
-	public List<License> findAllLicenses() {
-		TypedQuery<License> query = em.createQuery("Select l from License l", License.class);
-		List<License> licenses = query.getResultList();
-		return licenses;
-	}
-
 	public License findLicenseByNameAndURL(String licenseName, String licenseURL) {
 		
 		log.info("Searching for existing license by name and URL : " + licenseName + " url = " + licenseURL);
@@ -223,9 +186,5 @@ public class LicenseService extends EntityService {
 			log.info("Unable to find matching license");
 			return null;
 		}
-	}
-
-	public MavenCoordinate findMavenCoordinateById(Object id) {
-		return em.find(MavenCoordinate.class, id);
 	}
 }
