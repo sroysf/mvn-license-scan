@@ -41,34 +41,34 @@ public class ModelTest {
 		
 		// Licenses
 		License apache2 = new License("Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0.html");
-		apache2 = licenseService.addOrUpdateLicense(apache2);
+		apache2 = licenseService.addOrUpdateEntity(apache2);
 		
 		License lgpl3 = new License("GNU Lesser General Public License", "http://www.gnu.org/licenses/lgpl.txt");
-		lgpl3 = licenseService.addOrUpdateLicense(lgpl3);
+		lgpl3 = licenseService.addOrUpdateEntity(lgpl3);
 		
 		
 		// Maven Coordinates
 		MavenCoordinate httpClient = new MavenCoordinate("org.apache.httpcomponents", "httpclient", "4.1.1");
 		httpClient.setLicense(apache2);
-		httpClient = licenseService.addOrUpdateMavenCoordinate(httpClient);
+		httpClient = licenseService.addOrUpdateEntity(httpClient);
 		
 		MavenCoordinate spring = new MavenCoordinate("org.springframework", "spring-webmvc", "3.0.5.RELEASE");
 		spring.setLicense(apache2);
-		spring = licenseService.addOrUpdateMavenCoordinate(spring);
+		spring = licenseService.addOrUpdateEntity(spring);
 		
 		MavenCoordinate checkstyle = new MavenCoordinate("checkstyle", "checkstyle", "5.0");
 		checkstyle.setLicense(lgpl3);
-		checkstyle = licenseService.addOrUpdateMavenCoordinate(checkstyle);
+		checkstyle = licenseService.addOrUpdateEntity(checkstyle);
 		
 		// Policies
 		LicensePolicy policy = new LicensePolicy("SFDCOpenSource");
-		policy = licenseService.addOrUpdateLicensePolicy(policy);
+		policy = licenseService.addOrUpdateEntity(policy);
 		
 		LicensePermission p1 = new LicensePermission(policy, apache2, true);
 		LicensePermission p2 = new LicensePermission(policy, lgpl3, false);
 		
-		licenseService.addOrUpdateLicensePermission(p1);
-		licenseService.addOrUpdateLicensePermission(p2);
+		licenseService.addOrUpdateEntity(p1);
+		licenseService.addOrUpdateEntity(p2);
 		
 	}
 	

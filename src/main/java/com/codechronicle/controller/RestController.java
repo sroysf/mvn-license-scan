@@ -194,7 +194,8 @@ public class RestController {
 		
 		// TODO : Now we need to go from DTO -> Real Object.
 		License license = dtoMapper.toModel(License.class, reqDTO);
-		license = licenseService.addOrUpdateLicense(license);
+		//license = licenseService.addOrUpdateLicense(license);
+		license = licenseService.addOrUpdateEntity(license);
 		
 		DataTransferObject responseDTO = dtoMapper.fromModel(license);
 		logger.info("RESPONSE : " + responseDTO);
@@ -211,7 +212,7 @@ public class RestController {
 			}
 		});
 		
-		mvnCoord = licenseService.addOrUpdateMavenCoordinate(mvnCoord);
+		mvnCoord = licenseService.addOrUpdateEntity(mvnCoord);
 		DataTransferObject responseDTO = dtoMapper.fromModel(mvnCoord); 
 		
 		return responseDTO;

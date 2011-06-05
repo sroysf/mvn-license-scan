@@ -9,13 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.codechronicle.dto.BeanMapperUtil;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -25,7 +23,7 @@ import com.codechronicle.resolvers.LicenseResolver;
 import com.codechronicle.resolvers.MVNCentralLicenseResolver;
 
 @Service
-public class LicenseService {
+public class LicenseService extends EntityService {
 
 	private static final Logger log = LoggerFactory.getLogger(LicenseService.class);
 	
@@ -40,79 +38,6 @@ public class LicenseService {
 		licenseResolvers.add(new MVNCentralLicenseResolver());
 	}
 
-	@Transactional
-	public License addOrUpdateLicense(License license) {
-		
-		if (license.getId() != null) {
-			// This mapping is necessary due to the current Datanucleus known issue 
-			// about EntityManager.merge(). Instead, find the existing entity within the
-			// same transaction and set its properties
-			License existingLicense = em.find(License.class, license.getId());
-			if (existingLicense != null) {
-				BeanMapperUtil.copyProperties(license, existingLicense);
-			} else {
-				// This should be very unlikely, but just in case, go ahead and create a new entity
-				// and issue a warning.
-				log.warn("Attemped to modify License with id : " + license.getId() + ", but entity was not found. Creating new entity");
-				license = em.merge(license);
-			}
-		} else {
-			em.persist(license);
-		}
-		
-		log.info("Saved license : " + license);
-		return license;
-	}
-	
-	@Transactional
-	public MavenCoordinate addOrUpdateMavenCoordinate(MavenCoordinate mvnCoord) {
-		if ((mvnCoord.getId() != null) && (mvnCoord.getId().length() > 0)) {
-			// This mapping is necessary due to the current Datanucleus known issue 
-			// about EntityManager.merge(). Instead, find the existing entity within the
-			// same transaction and set its properties
-			log.info("Updating existing maven coordinate...");
-			MavenCoordinate existingCoord = em.find(MavenCoordinate.class, mvnCoord.getId());
-			if (existingCoord != null) {
-				BeanMapperUtil.copyProperties(mvnCoord, existingCoord);
-			} else {
-				log.warn("Attemped to modify artifact with id : " + mvnCoord.getId() + ", but entity was not found. Creating new entity");
-				mvnCoord = em.merge(mvnCoord);
-			}
-		} else {
-			log.info("Saving new maven coordinate...");
-			em.persist(mvnCoord);
-		}
-		
-		log.info("Saved MVN Coordinate : " + mvnCoord + ", with license = " + mvnCoord.getLicense());
-		log.info("New coordinate ID = " + mvnCoord.getId());
-		return mvnCoord;
-	}
-	
-	@Transactional
-	public LicensePolicy addOrUpdateLicensePolicy(LicensePolicy policy) {
-		if (policy.getId() != null) {
-			em.merge(policy);
-		} else {
-			em.persist(policy);
-		}
-		
-		log.info("Saved license policy : " + policy);
-		return policy;
-	}
-	
-	@Transactional
-	public LicensePermission addOrUpdateLicensePermission(LicensePermission licensePermission) {
-		
-		if (licensePermission.getId() != null) {
-			em.merge(licensePermission);
-		} else {
-			em.persist(licensePermission);
-		}
-		
-		log.info("Saved license permission : " + licensePermission);
-		return licensePermission;
-	}
-	
 	@Transactional
 	public List<LicensePermission> addOrUpdateLicensePermissionList(List<LicensePermission> licensePermissions) {
 		
@@ -221,7 +146,7 @@ public class LicenseService {
 					license = existingLicense;
 				} else {
 					log.info("Updating database with new license : " + license);
-					addOrUpdateLicense(license);
+					addOrUpdateEntity(license);
 				}
 				
 				// Map them into the maven coordinate
@@ -229,7 +154,7 @@ public class LicenseService {
 				mavenCoordinate.setLicenseInfoSource(resolver.getInformationSourceDescription());
 				
 				// Save the license, and the new maven coordinate
-				addOrUpdateLicense(license);
+				addOrUpdateEntity(license);
 				break;
 			}
 		}
@@ -239,7 +164,7 @@ public class LicenseService {
 			mavenCoordinate.setLicense(null);
 		}
 
-		addOrUpdateMavenCoordinate(mavenCoordinate);
+		addOrUpdateEntity(mavenCoordinate);
 		
 		return mavenCoordinate;
 	}

@@ -54,7 +54,7 @@ public class SerializationTest {
 		});
 		
 		System.out.println(mvnCoord + " -> " + mvnCoord.getId());
-		mvnCoord = licenseService.addOrUpdateMavenCoordinate(mvnCoord);
+		mvnCoord = licenseService.addOrUpdateEntity(mvnCoord);
 		System.out.println(mvnCoord + " -> " + mvnCoord.getId());
 	}
 }
