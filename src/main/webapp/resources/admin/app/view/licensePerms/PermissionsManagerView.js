@@ -4,7 +4,8 @@ Ext.define('AM.view.licensePerms.PermissionsManagerView' ,{
 
     items : [
         {xtype : 'licensePolicyList'
-        }
+        },
+        {xtype : 'permissionsList'}
     ],
     
     bodyPadding: 5,

@@ -5,7 +5,7 @@ Ext.define('AM.controller.PermissionsController', {
     
     models: ['License', 'LicensePolicy', 'LicensePermission'],
     
-    views: ['licensePerms.PermissionsManagerView', 'licensePerms.PolicyList'],
+    views: ['licensePerms.PermissionsManagerView', 'licensePerms.PolicyList', 'licensePerms.PermissionsList'],
          
     init: function() {
     	this.control({
