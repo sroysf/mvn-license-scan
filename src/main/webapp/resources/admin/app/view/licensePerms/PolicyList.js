@@ -1,4 +1,4 @@
-Ext.define('AM.view.licensePolicy.List' ,{
+Ext.define('AM.view.licensePerms.PolicyList' ,{
     extend: 'Ext.form.field.ComboBox',
     alias : 'widget.licensePolicyList',
 
@@ -6,7 +6,7 @@ Ext.define('AM.view.licensePolicy.List' ,{
     	
     	this.fieldLabel = 'License Policy';
     	
-        this.store = 'LicensePolicies';
+        this.store = 'LicensePolicyStore';
         
         this.queryMode = 'local';
         

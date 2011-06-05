@@ -15,6 +15,7 @@ Ext.define('AM.view.AppMain' ,{
     	
     	var artifactsLoadComplete = false;
     	var licensesLoadComplete = false;
+    	var policiesLoadComplete = false;
     	var self = this;
     	
     	// Show a loading window...
@@ -28,7 +29,7 @@ Ext.define('AM.view.AppMain' ,{
     			});
     	
     	function checkLoadCompleteStatus() {
-    		if (artifactsLoadComplete && licensesLoadComplete) {
+    		if (artifactsLoadComplete && licensesLoadComplete && policiesLoadComplete) {
     			console.log("Both loads are done!");
     			waitWindow.close();
     			console.log("Closed window.");
@@ -38,6 +39,7 @@ Ext.define('AM.view.AppMain' ,{
     	// Initiate important data loads...
     	var licensesStore = Ext.data.StoreManager.lookup('LicensesStore');
     	var artifactsStore = Ext.data.StoreManager.lookup('ArtifactsStore');
+    	var policiesStore = Ext.data.StoreManager.lookup('LicensePolicyStore');
     	
     	licensesStore.load(function(records, operation, success) {
     		if (success) {
@@ -57,6 +59,15 @@ Ext.define('AM.view.AppMain' ,{
     		}
 		});
     	
+    	policiesStore.load(function(records, operation, success) {
+    		if (success) {
+    			policiesLoadComplete = true;
+    			checkLoadCompleteStatus();
+    		} else {
+    			console.log("WARNING : Unable to load license policies data.");
+    		}
+		});
+    	
     	
     	// add the child components
     	this.items = [{                        
@@ -64,8 +75,8 @@ Ext.define('AM.view.AppMain' ,{
         },{
             xtype: 'artifactsManager',
         },{
-            xtype: 'panel',
-            title: 'Permissions',
+            xtype: 'licensePolicyList'
+            //title: 'Permissions',
         }];
     	
 		this.callParent(arguments);

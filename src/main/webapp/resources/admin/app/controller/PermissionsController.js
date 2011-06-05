@@ -1,11 +1,11 @@
 Ext.define('AM.controller.PermissionsController', {
     extend: 'Ext.app.Controller',
 
-    stores: [],
+    stores: ['LicensePolicyStore'],
     
     models: ['License', 'LicensePolicy', 'LicensePermission'],
     
-    views: [],
+    views: ['licensePerms.PolicyList'],
          
     init: function() {
     	/*this.control({

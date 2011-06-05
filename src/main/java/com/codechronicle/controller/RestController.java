@@ -101,6 +101,18 @@ public class RestController {
 	}
 	
 	/**
+	 * Get all known policies. This only returns policy information, not relational data about permissions
+	 * Example : /rest/policy
+	 */
+	@RequestMapping(method=RequestMethod.GET, value="/permission")
+	public @ResponseBody List<DataTransferObject> getAllLicensePermissions() {
+		
+		logger.info("//GET /rest/policy");
+		
+		return getAllEntities(LicensePermission.class);
+	}
+	
+	/**
 	 * Get all permissions that have been explicitly set for a given policy.
 	 * Example : /rest/permissions/a0Dx00000008mJdEAI
 	 * 
