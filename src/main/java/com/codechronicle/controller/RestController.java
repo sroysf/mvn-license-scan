@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +21,10 @@ import com.codechronicle.dto.BeanMapperUtil;
 import com.codechronicle.dto.LicensePermissionDTO;
 import com.codechronicle.dto.LicensePolicyDTO;
 import com.codechronicle.dto.MavenCoordinateDTO;
-import com.codechronicle.dtomapper.BeanUtilsDTOMapper;
 import com.codechronicle.dtomapper.DTOMapper;
 import com.codechronicle.dtomapper.DataTransferObject;
+import com.codechronicle.dtomapper.ModelEntityResolver;
+import com.codechronicle.dtomapper.impl.BeanUtilsDTOMapper;
 import com.codechronicle.model.License;
 import com.codechronicle.model.LicensePermission;
 import com.codechronicle.model.LicensePolicy;
@@ -38,6 +41,9 @@ public class RestController {
 	
 	@Inject
 	LicenseService licenseService;
+	
+	@PersistenceContext
+	EntityManager em;
 
 	//************************************
 	// Various finder methods - GET
@@ -47,17 +53,12 @@ public class RestController {
 	 * Example : /rest/artifact
 	 */
 	@RequestMapping(method=RequestMethod.GET, value="/artifact")
-	public @ResponseBody Collection<MavenCoordinateDTO> getAllArtifacts() {
+	public @ResponseBody List<DataTransferObject> getAllArtifacts() {
 		
 		logger.info("//GET /rest/artifact");
 		
 		List<MavenCoordinate> coords = licenseService.findAllMavenCoordinates();
-		
-		Collection<MavenCoordinateDTO> artifactList = new ArrayList<MavenCoordinateDTO>();
-		for (MavenCoordinate mavenCoordinate : coords) {
-			MavenCoordinateDTO dto = new MavenCoordinateDTO(mavenCoordinate);
-			artifactList.add(dto);
-		}
+		List<DataTransferObject> artifactList = dtoMapper.fromModelCollection(coords);
 		
 		return artifactList;
 	}
@@ -135,12 +136,15 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/artifact")
-	public @ResponseBody MavenCoordinateDTO createArtifact(@RequestBody MavenCoordinateDTO reqDTO) {
+	public @ResponseBody DataTransferObject createArtifact(@RequestBody DataTransferObject reqDTO) {
 		
-		logger.info("//POST /rest/license");
+		logger.info("//POST /rest/artifact");
 		logger.info("REQ received : " + reqDTO);
 		
-		MavenCoordinateDTO responseDTO = saveArtifact(reqDTO);
+		DataTransferObject responseDTO = saveArtifact(reqDTO);
+		responseDTO.put("success", "true");
+		
+		logger.info("Response artifact DTO : " + responseDTO);
 		
 		return responseDTO;
 	}
@@ -151,7 +155,7 @@ public class RestController {
 	
 	/**
 	 * Update license
-	 * Example : /rest/license
+	 * Example : /rest/license/12345
 	 */
 	@RequestMapping(method=RequestMethod.PUT, value="/license/{licenseId}")
 	public @ResponseBody DataTransferObject updateLicense(@RequestBody DataTransferObject reqDTO) {
@@ -160,6 +164,25 @@ public class RestController {
 		logger.info("REQ received : " + reqDTO);
 		
 		DataTransferObject responseDTO = saveLicense(reqDTO);
+		responseDTO.put("success", "true");
+		
+		return responseDTO;
+	}
+	
+	/**
+	 * Update artifact
+	 * Example : /rest/artifact/12345
+	 */
+	@RequestMapping(method=RequestMethod.PUT, value="/artifact/{artifactId}")
+	public @ResponseBody DataTransferObject updateArtifact(@RequestBody DataTransferObject reqDTO) {
+		
+		logger.info("//POST /rest/artifact");
+		logger.info("REQ received : " + reqDTO);
+		
+		DataTransferObject responseDTO = saveArtifact(reqDTO);
+		responseDTO.put("success", "true");
+		
+		logger.info("Response artifact DTO : " + responseDTO);
 		
 		return responseDTO;
 	}
@@ -178,12 +201,19 @@ public class RestController {
 		return responseDTO;
 	}
 	
-	private MavenCoordinateDTO saveArtifact(MavenCoordinateDTO reqDTO) {
-		MavenCoordinate mvnCoord = new MavenCoordinate(reqDTO);
-		mvnCoord = licenseService.addOrUpdateMavenCoordinate(mvnCoord);
+	private DataTransferObject saveArtifact(DataTransferObject reqDTO) {
 		
-		MavenCoordinateDTO responseDTO = new MavenCoordinateDTO(mvnCoord);
-		logger.info("RESPONSE : " + responseDTO);
+		MavenCoordinate mvnCoord = dtoMapper.toModel(MavenCoordinate.class, reqDTO, new ModelEntityResolver<License>() {
+			@Override
+			public License findEntity(Object id) {
+				License foundLicense = licenseService.findLicenseById((String)id);
+				return foundLicense;
+			}
+		});
+		
+		mvnCoord = licenseService.addOrUpdateMavenCoordinate(mvnCoord);
+		DataTransferObject responseDTO = dtoMapper.fromModel(mvnCoord); 
+		
 		return responseDTO;
 	}
 }

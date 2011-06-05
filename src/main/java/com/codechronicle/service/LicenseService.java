@@ -66,13 +66,25 @@ public class LicenseService {
 	
 	@Transactional
 	public MavenCoordinate addOrUpdateMavenCoordinate(MavenCoordinate mvnCoord) {
-		if (mvnCoord.getId() != null) {
-			em.merge(mvnCoord);
+		if ((mvnCoord.getId() != null) && (mvnCoord.getId().length() > 0)) {
+			// This mapping is necessary due to the current Datanucleus known issue 
+			// about EntityManager.merge(). Instead, find the existing entity within the
+			// same transaction and set its properties
+			log.info("Updating existing maven coordinate...");
+			MavenCoordinate existingCoord = em.find(MavenCoordinate.class, mvnCoord.getId());
+			if (existingCoord != null) {
+				BeanMapperUtil.copyProperties(mvnCoord, existingCoord);
+			} else {
+				log.warn("Attemped to modify artifact with id : " + mvnCoord.getId() + ", but entity was not found. Creating new entity");
+				mvnCoord = em.merge(mvnCoord);
+			}
 		} else {
+			log.info("Saving new maven coordinate...");
 			em.persist(mvnCoord);
 		}
 		
-		log.info("Saved MVN Coordinate : " + mvnCoord);
+		log.info("Saved MVN Coordinate : " + mvnCoord + ", with license = " + mvnCoord.getLicense());
+		log.info("New coordinate ID = " + mvnCoord.getId());
 		return mvnCoord;
 	}
 	
@@ -286,5 +298,9 @@ public class LicenseService {
 			log.info("Unable to find matching license");
 			return null;
 		}
+	}
+
+	public MavenCoordinate findMavenCoordinateById(Object id) {
+		return em.find(MavenCoordinate.class, id);
 	}
 }

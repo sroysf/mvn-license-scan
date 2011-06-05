@@ -81,7 +81,7 @@ Ext.define('AM.controller.ArtifactsController', {
 		console.log("Saving :");
 		console.log(values);
 		
-		/*var artifactsStore = Ext.data.StoreManager.lookup('artifactsStore');
+		var artifactsStore = Ext.data.StoreManager.lookup('ArtifactsStore');
 		
 		if (artifact.get('id') == "") {
 			
@@ -98,7 +98,7 @@ Ext.define('AM.controller.ArtifactsController', {
 			artifactsStore.sync();
 		}
 		
-		win.close();*/
+		win.close();
 	}
     
 });
