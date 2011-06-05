@@ -150,19 +150,6 @@ public class LicenseService extends EntityService {
 		return mavenCoordinate;
 	}
 	
-	public License findLicenseById(String licenseId) {
-		TypedQuery<License> query = em.createQuery("Select l from License l where id = :id", License.class);
-		query.setParameter("id", licenseId);
-		List<License> licenses = query.getResultList();
-		if (licenses.size() > 0) {
-			log.info("Found 1, licenses result set size is : " + licenses.size());
-			return licenses.get(0);
-		} else {
-			log.info("Unable to find matching license");
-			return null;
-		}
-	}
-	
 	public List<LicensePermission> findLicensePermissions(String policyId) {
 		TypedQuery<LicensePermission> query = em.createQuery("Select l from LicensePermission l where license.id = ?1", LicensePermission.class);
 		query.setParameter(1, policyId);

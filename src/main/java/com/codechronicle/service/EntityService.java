@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codechronicle.dto.BeanMapperUtil;
-import com.codechronicle.model.MavenCoordinate;
 
 @Service
 public class EntityService {
@@ -66,5 +65,9 @@ public class EntityService {
 		TypedQuery<T> query = em.createQuery("Select x from " + entityName + " x", entityClass);
 		List<T> entityList = query.getResultList();
 		return entityList;
+	}
+	
+	public <T> T findById(Class<T> entityClass, Object id) {
+		return em.find(entityClass, id);
 	}
 }

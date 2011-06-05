@@ -207,7 +207,7 @@ public class RestController {
 		MavenCoordinate mvnCoord = dtoMapper.toModel(MavenCoordinate.class, reqDTO, new ModelEntityResolver<License>() {
 			@Override
 			public License findEntity(Object id) {
-				License foundLicense = licenseService.findLicenseById((String)id);
+				License foundLicense = licenseService.findById(License.class, id);
 				return foundLicense;
 			}
 		});

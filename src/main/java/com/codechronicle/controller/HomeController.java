@@ -42,7 +42,7 @@ public class HomeController {
 	public @ResponseBody Map<String,String> jsonTest() {
 		Map<String,String> jsonMap = new HashMap<String, String>();
 		
-		License license  = licenseService.findLicenseById("a0Ex0000000Cefy");
+		License license  = licenseService.findById(License.class, "a0Ex0000000Cefy");
 		log.info("Found license : " + license);
 		
 		MavenCoordinate mvn = new MavenCoordinate("com.saptarshi", "dtomapper", "1.0-SNAPSHOT");
