@@ -5,9 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.codechronicle.dto.BeanMapperUtil;
-import com.codechronicle.dto.LicenseDTO;
-
 /**
  * This entity describes a specific instance of a license. For example, "Apache 2". For simplicity, we do
  * not incorporate pseudonyms (since there isn't really a standard for how different projects refer to the
@@ -26,6 +23,9 @@ public class License {
 	private String name;
 	private String url;
 	
+	public License() {
+	}
+	
 	public License(String name, String url) {
 		super();
 		
@@ -34,13 +34,10 @@ public class License {
 		this.url = url.toUpperCase();
 	}
 	
-	public License(LicenseDTO dto) {
-		BeanMapperUtil.copyProperties(dto, this);
-	}
-	
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -48,16 +45,19 @@ public class License {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getUrl() {
 		return url;
 	}
+
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name + " [" + url + "]";

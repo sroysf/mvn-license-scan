@@ -1,15 +1,11 @@
 package com.codechronicle.controller;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.codechronicle.dto.BaseDTO;
 import com.codechronicle.dto.BeanMapperUtil;
-import com.codechronicle.dto.LicenseDTO;
 import com.codechronicle.dto.LicensePermissionDTO;
 import com.codechronicle.dto.LicensePolicyDTO;
 import com.codechronicle.dto.MavenCoordinateDTO;
@@ -125,16 +119,15 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/license")
-	public @ResponseBody DataTransferObject createLicense(@RequestBody LicenseDTO reqDTO) {
+	public @ResponseBody DataTransferObject createLicense(@RequestBody DataTransferObject reqDTO) {
 		
 		logger.info("//POST /rest/license");
 		logger.info("REQ received : " + reqDTO);
 		
-		LicenseDTO responseDTO = saveLicense(reqDTO);
-		DataTransferObject response = dtoMapper.fromModel(responseDTO);
-		response.put("success", "true");
+		DataTransferObject responseDTO = saveLicense(reqDTO);
+		responseDTO.put("success", "true");
 		
-		return response;
+		return responseDTO;
 	}
 	
 	/**
@@ -161,12 +154,12 @@ public class RestController {
 	 * Example : /rest/license
 	 */
 	@RequestMapping(method=RequestMethod.PUT, value="/license/{licenseId}")
-	public @ResponseBody LicenseDTO updateLicense(@RequestBody LicenseDTO reqDTO) {
+	public @ResponseBody DataTransferObject updateLicense(@RequestBody DataTransferObject reqDTO) {
 		
 		logger.info("//PUT /rest/license");
 		logger.info("REQ received : " + reqDTO);
 		
-		LicenseDTO responseDTO = saveLicense(reqDTO);
+		DataTransferObject responseDTO = saveLicense(reqDTO);
 		
 		return responseDTO;
 	}
@@ -174,11 +167,13 @@ public class RestController {
 	//************************************
 	// Common helper methods
 	
-	private LicenseDTO saveLicense(LicenseDTO reqDTO) {
-		License license = new License(reqDTO);
+	private DataTransferObject saveLicense(DataTransferObject reqDTO) {
+		
+		// TODO : Now we need to go from DTO -> Real Object.
+		License license = dtoMapper.toModel(License.class, reqDTO);
 		license = licenseService.addOrUpdateLicense(license);
 		
-		LicenseDTO responseDTO = new LicenseDTO(license);
+		DataTransferObject responseDTO = dtoMapper.fromModel(license);
 		logger.info("RESPONSE : " + responseDTO);
 		return responseDTO;
 	}
